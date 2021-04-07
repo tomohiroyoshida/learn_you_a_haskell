@@ -1,6 +1,6 @@
-### 2. Starting Out
+# 2. Starting Out
 
-##### Baby's first functions
+### Baby's first functions
 
 - `+` expects its left and right side to be numbers.
 - If we tried to do True == 5, GHCI would tell us that the types don't match. Whereas + works only on things that are considered numbers, `==` works on any two things that can be compared.
@@ -24,7 +24,7 @@
 - That's because functions can't begin with uppercase letters. We'll see why a bit later.
 - The second thing is that this function doesn't take any parameters. When a function doesn't take any parameters, we usually say it's a definition (or a name).
 
-##### An intro to lists
+### An intro to lists
 
 - In Haskell, lists are a **homogenous** data structure.
 - That means that we can have a list of integers or a list of characters but we can't have a list that has a few integers and then a few characters.
@@ -34,14 +34,12 @@
 - A common task is putting two lists together. This is done by using the ++ operator.
 
 ```
-
 ghci> [1,2,3,4] ++ [9,10,11,12]
 [1,2,3,4,9,10,11,12]
 ghci> "hello" ++ " " ++ "world"
 "hello world"
 ghci> ['w','o'] ++ ['o','t']
 "woot"
-
 ```
 
 - Putting something at the beginning of a list using the : operator (also called the cons operator) is instantaneous.
@@ -64,7 +62,7 @@ ghci> [9.4,33.2,96.2,11.2,23.25] !! 1
 
 - `product [] == 1`
 
-##### Texas ranges
+### Texas ranges
 
 ```
 ghci> [1..20]
@@ -75,7 +73,7 @@ ghci> ['K'..'Z']
 "KLMNOPQRSTUVWXYZ"
 ```
 
-##### I'm a list comprehension
+### I'm a list comprehension
 
 ```
 ghci> [x*2 | x <- [1..10]]
@@ -106,7 +104,7 @@ ghci> [ [ x | x <- xs, even x ] | xs <- xxs]
 [[2,2,4],[2,4,6,8],[2,4,2,6,2,6]]
 ```
 
-##### Tuples
+### Tuples
 
 - Tuples, however, are used when you know exactly how many values you want to combine and its type depends on how many components it has and the types of the components. They are denoted with parentheses and their components are separated by commas.
 - Another key difference is that they don't have to be homogenous. Unlike a list, a tuple can contain a combination of several types.
