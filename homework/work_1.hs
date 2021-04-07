@@ -5,7 +5,10 @@ myGcd x y =
   else myGcd y (x `mod` y)
 
 myRange :: Integer -> Integer -> [Integer]
-myRange x y = [x..y]
+myRange x y =
+  if x > y then []
+  else if x == y then [x]
+  else x:myRange (x+1) y
 
 myInsert :: Integer -> [Integer] -> [Integer]
 myInsert x [] = [x]
