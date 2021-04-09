@@ -31,8 +31,8 @@ merge (x:xs) (y:ys)
 split :: [Int] -> ([Int], [Int])
 split = snd . foldr go (False, ([], []))
   where
-    go e (False, (a, b)) = (True, (e:a, b))
-    go e (True, (a, b)) = (False, (a, e:b))
+    go e (False, (x, y)) = (True, (e:x, y))
+    go e (True, (x, y)) = (False, (x, e:y))
 
 -- 問題9
 msort :: [Int] -> [Int]
