@@ -21,20 +21,18 @@ oddPlus1 xs =
 
 -- 問題7
 merge :: [Int] -> [Int] -> [Int]
-merge [] [] = []
-merge xs ys = xs ++ ys
+merge xs [] = xs
+merge [] ys = ys
+merge (x:xs) (y:ys)
+  | x < y = x:merge xs (y:ys)
+  | otherwise = y:merge (x:xs) ys
 
 -- 問題8
-split :: [a] -> ([a], [a])
+split :: [Int] -> ([Int], [Int])
 split = snd . foldr go (False, ([], []))
   where
     go e (False, (a, b)) = (True, (e:a, b))
     go e (True, (a, b)) = (False, (a, e:b))
-
-split2 :: [a] -> ([a], [a])
-split2 [] = ([], [])
-split2 xs = splitAt center xs
-  where center = (length xs) `div` 2
 
 -- 問題9
 msort :: [Int] -> [Int]
