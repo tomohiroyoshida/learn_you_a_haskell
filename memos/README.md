@@ -19,3 +19,15 @@
   ```
 
   [ソース資料](https://qiita.com/7shi/items/145f1234f8ec2af923ef#引数)
+
+- 合成関数 `.`
+  `.` を使うことで関数同士を合成することができる。
+  一番右の関数から評価される。
+
+  ```
+  foo x = f (g (h x))
+  foo x = (f . g . h) x
+  foo = f . g . h
+  ```
+
+  [ソース資料](http://walk.northcol.org/haskell/functions/#_%E9%96%A2%E6%95%B0%E5%90%88%E6%88%90)
