@@ -28,4 +28,8 @@ second xs = snd (split xs)
 
 -- 問題5
 msort :: [Int] -> [Int]
-msort xs = merge (first xs) (second xs)
+msort [] = []
+msort [x] = [x]
+msort xs = merge (msort left) (msort right)
+  where (left, right) = split xs
+-- msort xs = merge (msort (first xs)) (msort (second xs))
