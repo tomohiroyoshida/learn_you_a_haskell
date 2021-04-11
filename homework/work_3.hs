@@ -1,6 +1,6 @@
 data Tree =  Leaf | Node Tree Int Tree
 
--- Exercise
+-- Exercise 1
 preorder :: Tree -> [Int]
 preorder Leaf = []
 preorder (Node l x r) =
