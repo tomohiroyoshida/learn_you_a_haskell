@@ -17,22 +17,15 @@ merge (x:xs) (y:ys)
 
 -- 問題4
 split :: [Int] -> ([Int], [Int])
-split = snd . foldr halve (False, ([], []))
-
-halve :: Int -> (Bool, ([Int], [Int]))
-        -> (Bool, ([Int], [Int]))
-halve e (False, (x, y)) = (True, (e:x, y))
-halve e (True, (x, y)) = (False, (x, e:y))
-
--- split [] = ([],[])
--- split [x] = ([x], [])
--- split (x:y:zs) = ???
-
--- 問題5
-msort :: [Int] -> [Int]
-msort xs = merge (first xs) (second xs)
+split [] = ([],[])
+split [x] = ([x], [])
+split (x:y:zs) = (x:first zs, y:second zs)
 
 first :: [Int] -> [Int]
 first xs = fst (split xs)
 second :: [Int]-> [Int]
 second xs = snd (split xs)
+
+-- 問題5
+msort :: [Int] -> [Int]
+msort xs = merge (first xs) (second xs)

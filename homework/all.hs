@@ -61,16 +61,27 @@ merge (x:xs) (y:ys)
   | otherwise = y:merge (x:xs) ys
 
 -- 問題4
-split :: [a] -> ([a], [a])
-split = snd . foldr halve (False, ([], []))
-  where
-    halve e (False, (x, y)) = (True, (e:x, y))
-    halve e (True, (x, y)) = (False, (x, e:y))
+-- 想定解答？
+split :: [Int] -> ([Int], [Int])
+split [] = ([],[])
+split [x] = ([x], [])
+split (x:y:zs) = (x:xs, y:ys) where (xs, ys) = split zs
+-- split (x:y:zs) = (x:first zs, y:second zs)
+
+-- 畳み込みを使った場合
+split2 :: [Int] -> ([Int], [Int])
+split2 = snd . foldr halve (False, ([], []))
+  -- where
+  --   halve e (False, (x, y)) = (True, (e:x, y))
+  --   halve e (True, (x, y)) = (False, (x, e:y))
+halve :: Int -> (Bool, ([Int], [Int])) -> (Bool, ([Int], [Int]))
+halve e (False, (x, y)) = (True, (e:x, y))
+halve e (True, (x, y)) = (False, (x, e:y))
 
 -- 単に「リストの長さの中間地点」で半分にする場合
-split2 :: [a] -> ([a], [a])
-split2 [] = ([], [])
-split2 xs = splitAt center xs
+split3 :: [a] -> ([a], [a])
+split3 [] = ([], [])
+split3 xs = splitAt center xs
   where center = (length xs) `div` 2
 
 -- 問題5
