@@ -42,7 +42,7 @@ holds for all lists xs, ys, zs
 
 We show the claim by structural induction on xs, ys and zs.
 
-- If xs == ys == zs == [] then
+- If xs = ys = zs = [] then
 
   [] ++ ([] ++ [])  
   = [] + [] &emsp;&emsp;&emsp;by A1  
@@ -57,3 +57,14 @@ We show the claim by structural induction on xs, ys and zs.
   = (x : (xs' ++ (y : ys'))) ++ (z:zs') &nbsp;&nbsp;by A2  
   = ((x : xs') ++ (y : ys')) ++ (z:zs') &nbsp;&nbsp;by A2  
   = (xs ++ ys) ++ zs
+
+### No.3
+
+```
+Consider the two recursive functions on lists:
+rev [ ] = [ ]
+rev (x : xs) = rev xs ++[x]
+revapp [ ] ys = ys
+revapp (x : xs) ys = revapp xs (x : ys)
+Show rev xs = revapp xs [ ] for all lists xs.
+```
