@@ -9,6 +9,8 @@ L1 : length [] = 0
 L2 : length (x : xs) = 1 + length xs
 R1 : rev [] = []
 R2 : rev (x : xs) = rev xs ++[x]
+R3 : revapp [ ] ys = ys
+R4 : revapp (x : xs) ys = revapp xs (x : ys)
 ```
 
 ### No.1
