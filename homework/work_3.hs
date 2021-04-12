@@ -28,4 +28,4 @@ nub =  nubBy (/=)
 nubBy :: (a -> a -> Bool) -> [a] -> [a]
 nubBy _ [] =  []
 nubBy notEq (x : xs) =
-  x : nubBy notEq [y | y <- xs, x `notEq` y]
+  x : nubBy notEq [y | y <- xs, notEq x y]
