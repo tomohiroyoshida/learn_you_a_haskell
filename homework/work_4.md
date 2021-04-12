@@ -25,9 +25,9 @@ We show the claim by structural induction on xs.
 
 - If xs = x : xs' then
 
-  x : xs' ++ []
-  = x : (xs' ++ []) by A1
-  = x : xs'
+  x : xs' ++ []  
+  = x : (xs' ++ []) by A1  
+  = x : xs'  
   = xs
 
 ### No.2
@@ -42,16 +42,16 @@ We show the claim by structural induction on xs, ys and zs.
 
 - If xs == ys == zs == [] then
 
-  [] ++ ([] ++ [])
-  = [] + [] by A1
-  = [] ++ [] ++ [] by A1
+  [] ++ ([] ++ [])  
+  = [] + [] by A1  
+  = [] ++ [] ++ [] by A1  
   = ([] ++ []) ++ []
 
 - If xs = (x:xs'), ys = (y:ys') and zs = (z:zs') then
 
-  (x : xs') ++ ((y : ys') ++ (z : zs'))
-  = x : (xs' ++ ((y : ys') ++ (z : zs'))) by A2
-  = x : ((xs' ++ (y : ys')) ++ (z:zs')) by I.H.
-  = (x : (xs' ++ (y : ys'))) ++ (z:zs') by A2
-  = ((x : xs') ++ (y : ys')) ++ (z:zs') by A2
+  (x : xs') ++ ((y : ys') ++ (z : zs'))  
+  = x : (xs' ++ ((y : ys') ++ (z : zs'))) by A2  
+  = x : ((xs' ++ (y : ys')) ++ (z:zs')) by I.H.  
+  = (x : (xs' ++ (y : ys'))) ++ (z:zs') by A2  
+  = ((x : xs') ++ (y : ys')) ++ (z:zs') by A2  
   = (xs ++ ys) ++ zs
