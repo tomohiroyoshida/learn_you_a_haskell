@@ -53,7 +53,7 @@ We show the claim by structural induction on xs, ys and zs.
 
   (x : xs') ++ ((y : ys') ++ (z : zs'))  
   = x : (xs' ++ ((y : ys') ++ (z : zs'))) by A2  
-  = x : ((xs' ++ (y : ys')) ++ (z:zs')) by I.H.  
-  = (x : (xs' ++ (y : ys'))) ++ (z:zs') by A2  
-  = ((x : xs') ++ (y : ys')) ++ (z:zs') by A2  
+  = x : ((xs' ++ (y : ys')) ++ (z:zs')) &nbsp;&nbsp;by I.H.  
+  = (x : (xs' ++ (y : ys'))) ++ (z:zs') &nbsp;&nbsp;by A2  
+  = ((x : xs') ++ (y : ys')) ++ (z:zs') &nbsp;&nbsp;by A2  
   = (xs ++ ys) ++ zs
