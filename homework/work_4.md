@@ -45,7 +45,7 @@ We show the claim by structural induction on xs, ys and zs.
 - If xs == ys == zs == [] then
 
   [] ++ ([] ++ [])  
-  = [] + [] &emsp;&emsp;&emsp;&emsp; by A1  
+  = [] + [] &emsp;&emsp;&emsp; by A1  
   = [] ++ [] ++ [] by A1  
   = ([] ++ []) ++ []
 
