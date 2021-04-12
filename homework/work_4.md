@@ -14,7 +14,7 @@ R2 : rev (x : xs) = rev xs ++[x]
 ### No.1
 
 ```
-Show that *xs ++ [] = xs* holds for all lists xs.
+Show that * xs ++ [] = xs * holds for all lists xs.
 ```
 
 We show the claim by structural induction on xs.
