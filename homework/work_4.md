@@ -76,7 +76,7 @@ Show rev xs = revapp xs [ ] for all lists xs.
   rev [] = [] &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;by R1  
   revapp [] [] = [] by R3
 
-- If xs = (x : xs') then
+- If xs = (x : xs') then  
   rev (x : xs')  
   = rev xs
 
@@ -87,5 +87,5 @@ Show rev xs = revapp xs [ ] for all lists xs.
   = rev (x : xs')  
   = rev xs
 
-  - lemma:  
-    revapp xs' [x] = rev xs' ++ [x]
+  lemma:  
+   revapp xs' [x] = rev xs' ++ [x]
