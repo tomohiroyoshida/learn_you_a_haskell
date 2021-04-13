@@ -84,7 +84,7 @@ We show the claim by structural induction on xs.
   = revapp xs' (x : []) by R4  
   = revapp xs' [x]  
   = rev xs' ++ [x] &nbsp;&nbsp;&nbsp;&nbsp; by lemma  
-  = rev (x : xs') by R4  
+  = rev (x : xs') &emsp;&emsp;&emsp;&emsp;by R4  
   = rev xs
 
   lemma:  
