@@ -7,11 +7,11 @@ preorder (Node l x r) =
   [x] ++ preorder l ++ preorder r
 
 -- Exercise 2-1
-myLookUp :: Int -> [(Int, String)] -> Maybe String
+myLookUp :: Int -> [(Int, a)] -> Maybe a
 -- Exercise 2-2
 myLookUp _ [] = Nothing
 myLookUp x ((y, z) : yzs)
-  | x == y = Just (z)
+  | x == y = Just z
   | otherwise = myLookUp x yzs
 
 
