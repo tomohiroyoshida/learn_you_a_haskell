@@ -29,7 +29,7 @@ We show the claim by structural induction on xs.
 
   x : xs' ++ []  
   = x : (xs' ++ []) by A1  
-  = x : xs'  
+  = x : xs' &emsp;&emsp;&emsp;&emsp; by I.H.  
   = xs
 
 ### No.2
