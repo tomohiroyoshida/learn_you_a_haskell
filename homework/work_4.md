@@ -71,6 +71,8 @@ revapp (x : xs) ys = revapp xs (x : ys)
 Show rev xs = revapp xs [ ] for all lists xs.
 ```
 
+We show the claim by structural induction on xs.
+
 - If xs = [] then
 
   rev [] = [] &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;by R1  
