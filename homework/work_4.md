@@ -9,7 +9,7 @@ L1 : length [] = 0
 L2 : length (x : xs) = 1 + length xs
 R1 : rev [] = []
 R2 : rev (x : xs) = rev xs ++[x]
-R3 : revapp [ ] ys = ys
+R3 : revapp [] ys = ys
 R4 : revapp (x : xs) ys = revapp xs (x : ys)
 ```
 
@@ -47,7 +47,7 @@ We show the claim by structural induction on xs, ys and zs.
 - If xs = ys = zs = [] then
 
   [] ++ ([] ++ [])  
-  = [] + [] &emsp;&emsp;&emsp;by A1  
+  = [] ++ [] &emsp;&emsp;&emsp;by A1  
   = [] ++ [] ++ [] by A1  
   = ([] ++ []) ++ []
 
@@ -64,9 +64,26 @@ We show the claim by structural induction on xs, ys and zs.
 
 ```
 Consider the two recursive functions on lists:
-rev [ ] = [ ]
+rev [] = []
 rev (x : xs) = rev xs ++[x]
-revapp [ ] ys = ys
+revapp [] ys = ys
 revapp (x : xs) ys = revapp xs (x : ys)
 Show rev xs = revapp xs [ ] for all lists xs.
 ```
+
+- If xs = [] then
+
+  rev [] = [] &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;by R1  
+  revapp [] [] = [] by R3
+
+- If xs = (x : xs) then
+  rev (x : xs)  
+   = rev xs ++ [x] byR2
+
+  revapp (x : xs) []  
+   = revapp xs (x : []) by R4  
+  = revapp xs [x]  
+  = rev xs ++ [x] by lemma
+
+  - lemma
+    revapp (x : xs) [] = rev xs ++ [x]
