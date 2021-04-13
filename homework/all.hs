@@ -135,3 +135,18 @@ nubBy notEq (x : xs) =
 -- nubBy _ [] =  []
 -- nubBy notEq (x:xs) =
 --   x:nubBy notEq (filter (\y -> notEq x y) xs)
+
+
+-- work_4
+myProduct :: [Int] -> Int
+myProduct [] = 0
+myProduct [x] = x
+myProduct (x : xs) = x * myProduct xs
+
+rev :: [Int] -> [Int]
+rev [] = []
+rev (x : xs) = rev xs ++[x]
+
+revapp :: [Int] -> [Int] -> [Int]
+revapp [] ys = ys
+revapp (x : xs) ys = revapp xs (x : ys)
