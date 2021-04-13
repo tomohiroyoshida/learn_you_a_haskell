@@ -76,14 +76,16 @@ Show rev xs = revapp xs [ ] for all lists xs.
   rev [] = [] &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;by R1  
   revapp [] [] = [] by R3
 
-- If xs = (x : xs) then
-  rev (x : xs)  
-  = rev xs ++ [x] byR2
+- If xs = (x : xs') then
+  rev (x : xs')  
+  = rev xs
 
-  revapp (x : xs) []  
-  = revapp xs (x : []) by R4  
-  = revapp xs [x]  
-  = rev xs ++ [x] &nbsp;&nbsp;&nbsp;&nbsp; by lemma
+  revapp (x : xs') []  
+  = revapp xs' (x : []) by R4  
+  = revapp xs' [x]  
+  = rev xs' ++ [x] &nbsp;&nbsp;&nbsp;&nbsp; by lemma  
+  = rev (x : xs')  
+  = rev xs
 
   - lemma:  
-    revapp xs [x] = rev xs ++ [x]
+    revapp xs' [x] = rev xs' ++ [x]
