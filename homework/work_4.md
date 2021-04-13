@@ -82,7 +82,8 @@ Show rev xs = revapp xs [ ] for all lists xs.
 
   revapp (x : xs) []  
   = revapp xs (x : []) by R4  
-  = rev xs ++ [x] by lemma
+  = revapp xs [x]
+  = rev xs ++ [x] &nbsp;&nbsp;&nbsp;&nbsp; by lemma
 
-  - lemma  
-    revapp (x : xs) [] = rev xs ++ [x]
+  - lemma:  
+    revapp xs [x] = rev xs ++ [x]
