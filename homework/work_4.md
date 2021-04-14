@@ -41,25 +41,20 @@ xs ++ (ys ++ zs) = (xs ++ ys) ++ zs
 holds for all lists xs, ys, zs
 ```
 
-We show the claim by structural induction on xs and ys.
+We show the claim by structural induction on xs.
 
 - If xs = [] then
 
   [] ++ (ys ++ zs)  
   = ys ++ zs &emsp;&emsp;&nbsp; by A1
 
-- If ys = [] then
+- If xs = (x : xs') then
 
-  xs ++ ([] ++ zs)  
-  = xs ++ zs &emsp;&emsp;&nbsp; by A1
-
-- If xs = (x : xs'), ys = (y : ys') then
-
-  (x : xs') ++ ((y : ys') ++ zs)  
-  = x : (xs' ++ ((y : ys') ++ zs)) &nbsp;&nbsp;by A2  
-  = x : ((xs' ++ (y : ys')) ++ zs) &nbsp;&nbsp;by I.H.  
-  = (x : (xs' ++ (y : ys'))) ++ zs &nbsp;&nbsp;by A2  
-  = ((x : xs') ++ (y : ys')) ++ zs &nbsp;&nbsp;by A2  
+  (x : xs') ++ (ys ++ zs)  
+  = x : (xs' ++ (ys ++ zs)) &nbsp;&nbsp;by A2  
+  = x : ((xs' ++ ys) ++ zs) &nbsp;&nbsp;by I.H.  
+  = (x : (xs' ++ ys)) ++ zs &nbsp;&nbsp;by A2  
+  = ((x : xs') ++ ys) ++ zs &nbsp;&nbsp;by A2  
   = (xs ++ ys) ++ zs
 
 ### No.3
