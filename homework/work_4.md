@@ -28,8 +28,8 @@ We show the claim by structural induction on xs.
 
 - If xs = x : xs' then
 
-  x : xs' ++ []  
-  = x : (xs' ++ []) by A1  
+  (x : xs') ++ []  
+  = x : (xs' ++ []) by A2  
   = x : xs' &emsp;&emsp;&emsp; by I.H.  
   = xs
 
