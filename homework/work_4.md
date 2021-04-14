@@ -5,8 +5,9 @@
 ```
 A1 : [] ++ ys = ys
 A2 : (x : xs) ++ ys = x : (xs ++ ys)
+A3 : xs ++ [] = xs
 R1 : rev [] = []
-R2 : rev (x : xs) = rev xs ++[x]
+R2 : rev (x : xs) = rev xs ++ [x]
 R3 : revapp [] ys = ys
 R4 : revapp (x : xs) ys = revapp xs (x : ys)
 ```
@@ -40,22 +41,25 @@ xs ++ (ys ++ zs) = (xs ++ ys) ++ zs
 holds for all lists xs, ys, zs
 ```
 
-We show the claim by structural induction on xs, ys and zs.
+We show the claim by structural induction on xs and ys.
 
-- If xs = ys = zs = [] then
+- If xs = [] then
 
-  [] ++ ([] ++ [])  
-  = [] ++ [] &emsp;&emsp;&nbsp; by A1  
-  = [] ++ [] ++ [] by A1  
-  = ([] ++ []) ++ []
+  [] ++ (ys ++ zs)  
+  = ys ++ zs &emsp;&emsp;&nbsp; by A1
 
-- If xs = (x:xs'), ys = (y:ys') and zs = (z:zs') then
+- If ys = [] then
 
-  (x : xs') ++ ((y : ys') ++ (z : zs'))  
-  = x : (xs' ++ ((y : ys') ++ (z : zs'))) by A2  
-  = x : ((xs' ++ (y : ys')) ++ (z:zs')) &nbsp;&nbsp;by I.H.  
-  = (x : (xs' ++ (y : ys'))) ++ (z:zs') &nbsp;&nbsp;by A2  
-  = ((x : xs') ++ (y : ys')) ++ (z:zs') &nbsp;&nbsp;by A2  
+  xs ++ ([] ++ zs)  
+  = xs ++ zs &emsp;&emsp;&nbsp; by A1
+
+- If xs = (x : xs') and ys = (y : ys') then
+
+  (x : xs') ++ ((y : ys') ++ zs)  
+  = x : (xs' ++ ((y : ys') ++ zs)) by A2  
+  = x : ((xs' ++ (y : ys')) ++ zs) &nbsp;&nbsp;by I.H.  
+  = (x : (xs' ++ (y : ys'))) ++ zs &nbsp;&nbsp;by A2  
+  = ((x : xs') ++ (y : ys')) ++ zs &nbsp;&nbsp;by A2  
   = (xs ++ ys) ++ zs
 
 ### No.3
@@ -82,12 +86,26 @@ We show the claim by structural induction on xs.
 
   revapp (x : xs') []  
   = revapp xs' (x : []) by R4  
-  = revapp xs' [x]  
+  = revapp xs' [x]
   = rev xs' ++ [x] &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; by lemma  
   = rev (x : xs') &emsp;&emsp;&nbsp; by R2  
   = rev xs
 
-```
-lemma
+- lemma
   revapp xs' [x] = rev xs' ++ [x]
-```
+
+  - If xs = [] then
+    revapp [] = []
+    rev [] = []
+
+  - If xs = (x : xs') then
+
+<!-- No. 1 は帰納法の仮定 (induction hypothesis, I.H.) をどこで
+用いていますか？わかるように記して下さい。
+
+No. 2 は場合分けを取り尽くしていません。 xs = [1], ys = zs = [] の
+とき、証明が対応できません。そもそも本当に場合分けしないといけない
+変数はどれなのでしょうか。証明を整理して下さい。
+
+No. 3 は補題の証明を書いて下さい。また帰納法の仮定をどこで
+用いていますか？わかるように記して下さい。 -->
