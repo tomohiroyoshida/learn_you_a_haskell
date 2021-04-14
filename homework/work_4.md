@@ -5,7 +5,6 @@
 ```
 A1 : [] ++ ys = ys
 A2 : (x : xs) ++ ys = x : (xs ++ ys)
-A3 : xs ++ [] = xs
 R1 : rev [] = []
 R2 : rev (x : xs) = rev xs ++ [x]
 R3 : revapp [] ys = ys
@@ -86,7 +85,7 @@ We show the claim by structural induction on xs.
   = rev (x : xs') &emsp;&emsp;&nbsp; by R2  
   = rev xs
 
-- lemma
+- lemma (ここがよくわかりませんでした)
 
   ```
   revapp xs ys = rev xs ++ ys
@@ -95,7 +94,7 @@ We show the claim by structural induction on xs.
   We show the claim by structural induction on xs and ys.
 
   - If xs = [] then  
-    revapp [] ys = ys by R3
+    revapp [] ys = ys by R3  
     rev [] ++ ys = ys by R1
 
   - If ys = [] then  
