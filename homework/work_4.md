@@ -90,7 +90,7 @@ We show the claim by structural induction on xs.
   = rev (x : xs') &emsp;&emsp;&nbsp; by R2  
   = rev xs
 
-- lemma
+- lemma (ここがよくわかりませんでした)
 
   ```
   revapp xs ys = rev xs ++ ys
