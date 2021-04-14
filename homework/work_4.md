@@ -91,9 +91,12 @@ We show the claim by structural induction on xs.
   = rev (x : xs') &emsp;&emsp;&nbsp; by R2  
   = rev xs
 
-- lemma
+- lemma  
+  ```
   revapp xs ys = rev xs ++ ys
-
+  ```
+  We show the claim by structural induction on xs and ys.  
+   
   - If xs = [] then  
     revapp [] ys = ys by R3
     rev [] ++ ys = ys by R1
