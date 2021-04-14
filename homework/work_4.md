@@ -5,7 +5,6 @@
 ```
 A1 : [] ++ ys = ys
 A2 : (x : xs) ++ ys = x : (xs ++ ys)
-A3 : xs ++ [] = xs
 R1 : rev [] = []
 R2 : rev (x : xs) = rev xs ++ [x]
 R3 : revapp [] ys = ys
