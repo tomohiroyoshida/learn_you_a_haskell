@@ -53,10 +53,10 @@ We show the claim by structural induction on xs and ys.
   xs ++ ([] ++ zs)  
   = xs ++ zs &emsp;&emsp;&nbsp; by A1
 
-- If xs = (x : xs') and ys = (y : ys') then
+- If xs = (x : xs'), ys = (y : ys') then
 
   (x : xs') ++ ((y : ys') ++ zs)  
-  = x : (xs' ++ ((y : ys') ++ zs)) by A2  
+  = x : (xs' ++ ((y : ys') ++ zs)) &nbsp;&nbsp;by A2  
   = x : ((xs' ++ (y : ys')) ++ zs) &nbsp;&nbsp;by I.H.  
   = (x : (xs' ++ (y : ys'))) ++ zs &nbsp;&nbsp;by A2  
   = ((x : xs') ++ (y : ys')) ++ zs &nbsp;&nbsp;by A2  
@@ -67,7 +67,7 @@ We show the claim by structural induction on xs and ys.
 ```
 Consider the two recursive functions on lists:
 rev [] = []
-rev (x : xs) = rev xs ++[x]
+rev (x : xs) = rev xs ++ [x]
 revapp [] ys = ys
 revapp (x : xs) ys = revapp xs (x : ys)
 Show rev xs = revapp xs [] for all lists xs.
@@ -86,19 +86,32 @@ We show the claim by structural induction on xs.
 
   revapp (x : xs') []  
   = revapp xs' (x : []) by R4  
-  = revapp xs' [x]
+  = revapp xs' [x]  
   = rev xs' ++ [x] &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; by lemma  
   = rev (x : xs') &emsp;&emsp;&nbsp; by R2  
   = rev xs
 
 - lemma
-  revapp xs' [x] = rev xs' ++ [x]
+  revapp xs ys = rev xs ++ ys
 
-  - If xs = [] then
-    revapp [] = []
-    rev [] = []
+  - If xs = [] then  
+    revapp [] ys = ys by R3
+    rev [] ++ ys = ys by R1
 
-  - If xs = (x : xs') then
+  - If ys = [] then  
+    revapp (x : xs') []  
+    = revapp xs' (x : []) by R4  
+    = ???
+
+    rev xs ++ []  
+    = rev xs by R1
+
+  - If xs = (x : xs'), (y: ys') then  
+    revapp (x : xs') (y : ys')  
+    = revapp xs' (x : y : ys') by R4  
+    = rev xs' ++ (x : y : ys') by I.H.  
+    = rev (x : y : ys') : xs' by R2  
+    = ???
 
 <!-- No. 1 は帰納法の仮定 (induction hypothesis, I.H.) をどこで
 用いていますか？わかるように記して下さい。
