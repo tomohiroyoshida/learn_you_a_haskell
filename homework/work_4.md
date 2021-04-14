@@ -99,7 +99,7 @@ We show the claim by structural induction on xs.
   We show the claim by structural induction on xs and ys.
 
   - If xs = [] then  
-    revapp [] ys = ys by R3
+    revapp [] ys = ys by R3  
     rev [] ++ ys = ys by R1
 
   - If ys = [] then  
