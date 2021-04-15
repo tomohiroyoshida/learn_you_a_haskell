@@ -45,6 +45,9 @@ We show the claim by structural induction on xs.
 - If xs = [] then
 
   [] ++ (ys ++ zs)  
+  = ys ++ zs &emsp;&emsp;&nbsp; by A1  
+  
+  ([] ++ ys) ++ zs  
   = ys ++ zs &emsp;&emsp;&nbsp; by A1
 
 - If xs = (x : xs') then
