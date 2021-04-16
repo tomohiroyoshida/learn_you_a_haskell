@@ -133,7 +133,8 @@ We show the claim by structural induction on xs.
 
   - If xs = [] then
 
-    revapp [] ys = ys &nbsp;&nbsp; by R3  
+    revapp [] ys = ys &nbsp;&nbsp; by R3
+
     rev [] ++ ys = ys &nbsp;&nbsp;&nbsp; by R1
 
   - If xs = (x : xs') then
