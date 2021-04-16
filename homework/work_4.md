@@ -91,7 +91,7 @@ We show the claim by structural induction on xs.
   = rev xs
 
   revapp (x : xs') []  
-  = revapp xs' (x : []) &nbsp;&nbsp; by R4  
+  = revapp xs' (x : []) by R4  
   = revapp xs' ([x] ++ []) by lemma1  
   = revapp xs' [x] &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; by A3  
   = rev xs' ++ [x] &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; by lemma2  
