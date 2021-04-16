@@ -125,11 +125,11 @@ We show the claim by structural induction on xs.
   
   - If ys = [] then  
     x : []  
-    = [x] &emsp;&emsp;&emsp;&emsp; by A3  
+    = [x] &emsp;&emsp;&emsp; by A3  
     = [x] ++ [] &nbsp; by A3  
   
   - If ys = (y : ys') then  
     x : (y : ys')  
-    = [x] ++ (y : ys') &nbsp; by I.H.  
+    = [x] ++ (y : ys') &nbsp;&nbsp; by I.H.  
     = [x] ++ ([y] ++ ys') &nbsp; by I.H.  
     = [x] ++ ys
