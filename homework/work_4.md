@@ -145,7 +145,7 @@ We show the claim by structural induction on xs.
   - If ys = [] then
 
     x : []  
-    = [x] &emsp;&emsp;&emsp; by A3
+    = [x] &emsp;&emsp;&emsp;  
 
     [x] ++ []  
     = [x] &emsp;&emsp;&emsp; by A3
