@@ -32,8 +32,8 @@ We show the claim by structural induction on xs.
   (x : xs') ++ []  
   = x : (xs' ++ []) by A2  
   = x : xs' &emsp;&emsp;&emsp; by I.H.  
-  = xs  
-  
+  = xs
+
 Now we use the claim as the definition of `A3`
 
 ### No.2
@@ -49,8 +49,8 @@ We show the claim by structural induction on xs.
 - If xs = [] then
 
   [] ++ (ys ++ zs)  
-  = ys ++ zs &emsp;&emsp;&nbsp; by A1  
-  
+  = ys ++ zs &emsp;&emsp;&nbsp; by A1
+
   ([] ++ ys) ++ zs  
   = ys ++ zs &emsp;&emsp;&nbsp; by A1
 
@@ -61,8 +61,8 @@ We show the claim by structural induction on xs.
   = x : ((xs' ++ ys) ++ zs) &nbsp;&nbsp;by I.H.  
   = (x : (xs' ++ ys)) ++ zs &nbsp;&nbsp;by A2  
   = ((x : xs') ++ ys) ++ zs &nbsp;&nbsp;by A2  
-  = (xs ++ ys) ++ zs  
-  
+  = (xs ++ ys) ++ zs
+
 Now we can use the claim as the definition of `A4`.
 
 ### No.3
@@ -83,7 +83,7 @@ We show the claim by structural induction on xs.
   rev [] = [] &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;by R1  
   revapp [] [] = [] by R3
 
-- If xs = (x : xs') then  
+- If xs = (x : xs') then
 
   rev (x : xs')  
   = rev xs
@@ -103,38 +103,40 @@ We show the claim by structural induction on xs.
 
   We show the claim by structural induction on xs.
 
-  - If xs = [] then  
+  - If xs = [] then
 
     revapp [] ys = ys by R3  
     rev [] ++ ys = ys by R1
-    
-  - If xs = (x : xs') then  
+
+  - If xs = (x : xs') then
 
     revapp (x : xs') ys  
     = revapp xs' (x : ys) &nbsp;by R4  
     = rev xs' ++ (x : ys) &nbsp; by I.H.  
-    = rev xs' ++ ([x] ++ ys)  &nbsp; by lemma2
+    = rev xs' ++ ([x] ++ ys) &nbsp; by lemma2
     = (rev xs' ++ [x]) ++ ys &nbsp; by A3  
     = rev (x : xs') ++ ys &nbsp; by R2  
     = rev xs ys
 
   - lemma2
-  
+
   ```
   x : ys = [x] ++ ys
   ```
-  
+
   We show the claim by structual induction on ys.
-  
-  - If ys = [] then  
+
+  - If ys = [] then
 
     x : []  
-    = [x] &emsp;&emsp;&emsp; by A3  
-    = [x] ++ [] &nbsp;&nbsp; by A3  
-  
-  - If ys = (y : ys') then  
+    = [x] &emsp;&emsp;&emsp; by A3
+
+    [x] ++ []  
+    = [x] &emsp;&emsp;&emsp; by A3
+
+  - If ys = (y : ys') then
 
     x : (y : ys')  
-    = [x] ++ (y : ys')  &emsp;&emsp; by I.H.  
+    = [x] ++ (y : ys') &emsp;&emsp; by I.H.  
     = [x] ++ ([y] ++ ys') &nbsp; by I.H.  
     = [x] ++ ys
