@@ -5,8 +5,8 @@
 ```
 A1 : [] ++ ys = ys
 A2 : (x : xs) ++ ys = x : (xs ++ ys)
-(A3 : xs ++ [] = xs)
-(A4 : xs ++ (ys ++ zs) = (xs ++ ys) ++ zs)
+A3 : xs ++ [] = xs
+A4 : xs ++ (ys ++ zs) = (xs ++ ys) ++ zs
 R1 : rev [] = []
 R2 : rev (x : xs) = rev xs ++ [x]
 R3 : revapp [] ys = ys
@@ -129,7 +129,7 @@ We show the claim by structural induction on xs.
     revapp (x : xs') ys  
     = revapp xs' (x : ys) &nbsp;by R4  
     = rev xs' ++ (x : ys) &nbsp; by I.H.  
-    = rev xs' ++ ([x] ++ ys) &nbsp; by lemma1  
+    = rev xs' ++ ([x] ++ ys) &nbsp; by lemma2  
     = (rev xs' ++ [x]) ++ ys &nbsp; by A4  
     = rev (x : xs') ++ ys &nbsp; by R2  
     = rev xs ++ ys
