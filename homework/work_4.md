@@ -118,7 +118,7 @@ We show the claim by structural induction on xs.
     = rev (x : xs') ++ ys &nbsp; by R2  
     = rev xs ys
 
-  - lemma2
+- lemma2
 
   ```
   x : ys = [x] ++ ys
