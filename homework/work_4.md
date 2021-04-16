@@ -103,7 +103,8 @@ We show the claim by structural induction on xs.
   - If xs = (x : xs') then  
     revapp (x : xs') ys  
     = revapp xs' (x : ys) by R4  
-    = rev xs' ++ (x : ys) by I.H.    
+    = rev xs' ++ (x : ys) &nbsp; by I.H.  
+    = rev xs' ++ ([x] ++ ys)  
     = rev xs' ++ [x] ++ ys  
     = rev (x : xs') ++ ys by R2  
     = rev xs ys
