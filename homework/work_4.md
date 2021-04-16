@@ -88,32 +88,25 @@ We show the claim by structural induction on xs.
   = rev (x : xs') &emsp;&emsp;&nbsp; by R2  
   = rev xs
 
-- lemma (ここがよくわかりませんでした)
+- lemma 
 
   ```
   revapp xs ys = rev xs ++ ys
   ```
 
-  We show the claim by structural induction on xs and ys.
+  We show the claim by structural induction on xs.
 
   - If xs = [] then  
     revapp [] ys = ys by R3  
     rev [] ++ ys = ys by R1
-
-  - If ys = [] then  
-    revapp (x : xs') []  
-    = revapp xs' (x : []) by R4  
-    = ???
-
-    rev xs ++ []  
-    = rev xs by R1
-
-  - If xs = (x : xs'), (y: ys') then  
-    revapp (x : xs') (y : ys')  
-    = revapp xs' (x : y : ys') by R4  
-    = rev xs' ++ (x : y : ys') by I.H.  
-    = rev (x : y : ys') : xs' by R2  
-    = ???
+    
+  - If xs = (x : xs') then  
+    revapp (x : xs') ys  
+    = revapp xs' (x : ys) by R4  
+    = rev xs' ++ (x : ys) by I.H.    
+    = rev xs' ++ [x] ++ ys  
+    = rev (x : xs') ++ ys by R2  
+    = rev xs ys
 
 <!-- No. 1 は帰納法の仮定 (induction hypothesis, I.H.) をどこで
 用いていますか？わかるように記して下さい。
