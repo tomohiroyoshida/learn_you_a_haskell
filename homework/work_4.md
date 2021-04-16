@@ -82,6 +82,7 @@ We show the claim by structural induction on xs.
 - If xs = [] then
 
   rev [] = [] &nbsp;&emsp;&emsp;&nbsp; by R1  
+  
   revapp [] [] = [] by R3
 
 - If xs = (x : xs') then
