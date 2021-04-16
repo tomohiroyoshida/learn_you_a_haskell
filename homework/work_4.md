@@ -5,6 +5,7 @@
 ```
 A1 : [] ++ ys = ys
 A2 : (x : xs) ++ ys = x : (xs ++ ys)
+(A3 : xs ++ (ys ++ zs) = (xs ++ ys) ++ zs)
 R1 : rev [] = []
 R2 : rev (x : xs) = rev xs ++ [x]
 R3 : revapp [] ys = ys
@@ -57,7 +58,9 @@ We show the claim by structural induction on xs.
   = x : ((xs' ++ ys) ++ zs) &nbsp;&nbsp;by I.H.  
   = (x : (xs' ++ ys)) ++ zs &nbsp;&nbsp;by A2  
   = ((x : xs') ++ ys) ++ zs &nbsp;&nbsp;by A2  
-  = (xs ++ ys) ++ zs
+  = (xs ++ ys) ++ zs  
+  
+  Now we can use the theorem as definition `A3`.
 
 ### No.3
 
@@ -105,16 +108,6 @@ We show the claim by structural induction on xs.
     = revapp xs' (x : ys) &nbsp;by R4  
     = rev xs' ++ (x : ys) &nbsp; by I.H.  
     = rev xs' ++ ([x] ++ ys)  
-    = rev xs' ++ [x] ++ ys  
+    = (rev xs' ++ [x]) ++ ys &nbsp; by A3  
     = rev (x : xs') ++ ys &nbsp; by R2  
     = rev xs ys
-
-<!-- No. 1 は帰納法の仮定 (induction hypothesis, I.H.) をどこで
-用いていますか？わかるように記して下さい。
-
-No. 2 は場合分けを取り尽くしていません。 xs = [1], ys = zs = [] の
-とき、証明が対応できません。そもそも本当に場合分けしないといけない
-変数はどれなのでしょうか。証明を整理して下さい。
-
-No. 3 は補題の証明を書いて下さい。また帰納法の仮定をどこで
-用いていますか？わかるように記して下さい。 -->
