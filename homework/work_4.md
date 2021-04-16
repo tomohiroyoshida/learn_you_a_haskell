@@ -84,6 +84,7 @@ We show the claim by structural induction on xs.
   revapp [] [] = [] by R3
 
 - If xs = (x : xs') then  
+
   rev (x : xs')  
   = rev xs
 
@@ -103,10 +104,12 @@ We show the claim by structural induction on xs.
   We show the claim by structural induction on xs.
 
   - If xs = [] then  
+
     revapp [] ys = ys by R3  
     rev [] ++ ys = ys by R1
     
   - If xs = (x : xs') then  
+
     revapp (x : xs') ys  
     = revapp xs' (x : ys) &nbsp;by R4  
     = rev xs' ++ (x : ys) &nbsp; by I.H.  
@@ -124,11 +127,13 @@ We show the claim by structural induction on xs.
   We show the claim by structual induction on ys.
   
   - If ys = [] then  
+
     x : []  
     = [x] &emsp;&emsp;&emsp; by A3  
     = [x] ++ [] &nbsp;&nbsp; by A3  
   
   - If ys = (y : ys') then  
+
     x : (y : ys')  
     = [x] ++ (y : ys')  &emsp;&emsp; by I.H.  
     = [x] ++ ([y] ++ ys') &nbsp; by I.H.  
