@@ -90,9 +90,9 @@ We show the claim by structural induction on xs.
 
   revapp (x : xs') []  
   = revapp xs' (x : []) by R4  
-  = revapp xs' [x] &nbsp;&nbsp;&nbsp;&nbsp; by lemma1  
-  = rev xs' ++ [x] &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; by lemma2  
-  = rev (x : xs') &emsp;&emsp;&nbsp; by R2  
+  = revapp xs' [x] &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; by lemma1  
+  = rev xs' ++ [x] &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; by lemma2  
+  = rev (x : xs') &nbsp;&emsp;&emsp;&nbsp; by R2  
   = rev xs
 
 ---
