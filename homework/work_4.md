@@ -142,7 +142,7 @@ We show the claim by structural induction on xs.
     = revapp xs' (x : ys) &nbsp;by R4  
     = rev xs' ++ (x : ys) &nbsp; by I.H.  
     = rev xs' ++ ([x] ++ ys) &nbsp; by lemma1  
-    = (rev xs' ++ [x]) ++ ys &nbsp; by A3  
+    = (rev xs' ++ [x]) ++ ys &nbsp; by A4  
     = rev (x : xs') ++ ys &nbsp; by R2  
     = rev xs ys
 
