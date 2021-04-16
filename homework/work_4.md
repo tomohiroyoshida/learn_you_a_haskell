@@ -102,11 +102,11 @@ We show the claim by structural induction on xs.
     
   - If xs = (x : xs') then  
     revapp (x : xs') ys  
-    = revapp xs' (x : ys) by R4  
+    = revapp xs' (x : ys) &nbsp;by R4  
     = rev xs' ++ (x : ys) &nbsp; by I.H.  
     = rev xs' ++ ([x] ++ ys)  
     = rev xs' ++ [x] ++ ys  
-    = rev (x : xs') ++ ys by R2  
+    = rev (x : xs') ++ ys &nbsp; by R2  
     = rev xs ys
 
 <!-- No. 1 は帰納法の仮定 (induction hypothesis, I.H.) をどこで
