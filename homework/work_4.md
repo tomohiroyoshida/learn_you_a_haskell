@@ -63,7 +63,7 @@ We show the claim by structural induction on xs.
   = ((x : xs') ++ ys) ++ zs &nbsp;&nbsp;by A2  
   = (xs ++ ys) ++ zs  
   
-  Now we can use the claim as the definition `A4`.
+Now we can use the claim as the definition `A4`.
 
 ### No.3
 
