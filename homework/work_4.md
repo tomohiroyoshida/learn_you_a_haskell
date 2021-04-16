@@ -90,12 +90,37 @@ We show the claim by structural induction on xs.
 
   revapp (x : xs') []  
   = revapp xs' (x : []) by R4  
-  = revapp xs' [x]  
-  = rev xs' ++ [x] &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; by lemma1  
+  = revapp xs' [x] by lemma1  
+  = rev xs' ++ [x] &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; by lemma2  
   = rev (x : xs') &emsp;&emsp;&nbsp; by R2  
   = rev xs
 
+---
+
 - lemma1
+
+  ```
+  x : ys = [x] ++ ys
+  ```
+
+  We show the claim by structual induction on ys.
+
+  - If ys = [] then
+
+    x : []  
+    = [x] &emsp;&emsp;&emsp; by A3
+
+    [x] ++ []  
+    = [x] &emsp;&emsp;&emsp; by A3
+
+  - If ys = (y : ys') then
+
+    x : (y : ys')  
+    = [x] ++ (y : ys') &emsp;&emsp; by I.H.  
+    = [x] ++ ([y] ++ ys') &nbsp; by I.H.  
+    = [x] ++ ys
+
+- lemma2
 
   ```
   revapp xs ys = rev xs ++ ys
@@ -118,25 +143,4 @@ We show the claim by structural induction on xs.
     = rev (x : xs') ++ ys &nbsp; by R2  
     = rev xs ys
 
-- lemma2
-
-  ```
-  x : ys = [x] ++ ys
-  ```
-
-  We show the claim by structual induction on ys.
-
-  - If ys = [] then
-
-    x : []  
-    = [x] &emsp;&emsp;&emsp; by A3
-
-    [x] ++ []  
-    = [x] &emsp;&emsp;&emsp; by A3
-
-  - If ys = (y : ys') then
-
-    x : (y : ys')  
-    = [x] ++ (y : ys') &emsp;&emsp; by I.H.  
-    = [x] ++ ([y] ++ ys') &nbsp; by I.H.  
-    = [x] ++ ys
+---
