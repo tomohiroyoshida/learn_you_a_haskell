@@ -87,15 +87,15 @@ We show the claim by structural induction on xs.
 
 - If xs = (x : xs') then
 
-rev (x : xs')  
-= rev xs' ++ [x] by R2  
-= revapp xs' [] ++ [x] by I.H.  
-= rev xs' ++ [] ++ [x] by lemma1  
-= rev xs' ++ [x] by A1  
-= rev (x : xs') by R2  
-= rev (x : xs') ++ [] by A3  
-= revapp (x : xs') [] by lemma1  
-= revapp xs []
+  rev (x : xs')  
+  = rev xs' ++ [x] &emsp;&emsp;&emsp; by R2  
+  = revapp xs' [] ++ [x]&emsp;by I.H.  
+  = rev xs' ++ [] ++ [x]&emsp;by lemma1  
+  = rev xs' ++ [x] &emsp;&emsp;&emsp; by A1  
+  = rev (x : xs') &emsp;&emsp;&emsp;&emsp; by R2  
+  = rev (x : xs') ++ [] &emsp;&emsp; by A3  
+  = revapp (x : xs') [] &emsp;&emsp; by lemma1  
+  = revapp xs []
 
   <!-- rev (x : xs')  
   = rev xs
