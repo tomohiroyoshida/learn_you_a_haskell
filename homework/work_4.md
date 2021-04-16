@@ -5,7 +5,8 @@
 ```
 A1 : [] ++ ys = ys
 A2 : (x : xs) ++ ys = x : (xs ++ ys)
-(A3 : xs ++ (ys ++ zs) = (xs ++ ys) ++ zs)
+(A3 : xs ++ [] = xs)
+(A4 : xs ++ (ys ++ zs) = (xs ++ ys) ++ zs)
 R1 : rev [] = []
 R2 : rev (x : xs) = rev xs ++ [x]
 R3 : revapp [] ys = ys
@@ -31,7 +32,9 @@ We show the claim by structural induction on xs.
   (x : xs') ++ []  
   = x : (xs' ++ []) by A2  
   = x : xs' &emsp;&emsp;&emsp; by I.H.  
-  = xs
+  = xs  
+  
+Now we use the claim as the definition of `A3`
 
 ### No.2
 
@@ -60,7 +63,7 @@ We show the claim by structural induction on xs.
   = ((x : xs') ++ ys) ++ zs &nbsp;&nbsp;by A2  
   = (xs ++ ys) ++ zs  
   
-  Now we can use the theorem as definition `A3`.
+  Now we can use the claim as the definition `A4`.
 
 ### No.3
 
@@ -87,11 +90,11 @@ We show the claim by structural induction on xs.
   revapp (x : xs') []  
   = revapp xs' (x : []) by R4  
   = revapp xs' [x]  
-  = rev xs' ++ [x] &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; by lemma  
+  = rev xs' ++ [x] &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; by lemma1  
   = rev (x : xs') &emsp;&emsp;&nbsp; by R2  
   = rev xs
 
-- lemma 
+- lemma1
 
   ```
   revapp xs ys = rev xs ++ ys
@@ -107,7 +110,28 @@ We show the claim by structural induction on xs.
     revapp (x : xs') ys  
     = revapp xs' (x : ys) &nbsp;by R4  
     = rev xs' ++ (x : ys) &nbsp; by I.H.  
-    = rev xs' ++ ([x] ++ ys)  
+    = rev xs' ++ ([x] ++ ys)  &nbsp; by lemma2
     = (rev xs' ++ [x]) ++ ys &nbsp; by A3  
     = rev (x : xs') ++ ys &nbsp; by R2  
     = rev xs ys
+
+  - lemma2
+  
+  ```
+  x : ys = [x] ++ ys
+  ```
+  
+  We show the claim by structual induction on ys.
+  
+  - If ys = [] then  
+  
+  x : []  
+  = [x] &emsp;&emsp;&emsp;&emsp; by A3  
+  = [x] ++ [] &nbsp; by A3  
+  
+  - If ys = (y : ys') then  
+  
+  x : (y : ys')  
+  = [x] ++ (y : ys') &nbsp; by I.H.  
+  = [x] ++ ([y] ++ ys') &nbsp; by I.H.  
+  = [x] ++ ys
