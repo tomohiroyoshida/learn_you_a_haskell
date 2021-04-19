@@ -31,3 +31,6 @@
   ```
 
   [ソース資料](http://walk.northcol.org/haskell/functions/#_%E9%96%A2%E6%95%B0%E5%90%88%E6%88%90)
+
+- `Eq` について
+  Eq is used for types that support equality testing. The functions its members implement are == and /=. So if there's an Eq class constraint for a type variable in a function, it uses == or /= somewhere inside its definition. All the types we mentioned previously except for functions are part of Eq, so they can be tested for equality.
