@@ -29,7 +29,7 @@ showEs (x : xs) = show x ++ " " ++ showEs xs
 showFs :: [Formula] -> String
 showFs [] = ""
 showFs [f] = show f
-showFs (f: fs) = show f ++ " " ++ showFs fs
+showFs (f : fs) = show f ++ " " ++ showFs fs
 
 instance Show Exp where
   show (Val n) = show n
