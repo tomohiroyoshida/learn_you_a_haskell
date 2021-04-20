@@ -1,4 +1,5 @@
--- 論理式の実装
+-- 論理式の表示
+
 data Exp = Var Int Int | Val Int | Plus [Exp]
 
 data Formula = And [Formula]
