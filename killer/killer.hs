@@ -41,7 +41,7 @@ showPls xs = intercalate " " [showEs xs]
 
 -- 数独ソルバー
 cageFormula :: [[Int]] -> String
-cageFormula ((xs)) = "(and " ++ showCFs xs ++ ")"
+cageFormula xs = "(and " ++ showCFs xs ++ ")"
 
 showCFs :: [[Int]] -> String
 showCFs [] = []
