@@ -1,5 +1,4 @@
 -- 論理式の表示
-
 data Exp = Var Int Int | Val Int | Plus [Exp]
 
 data Formula = And [Formula]
@@ -22,7 +21,7 @@ instance Show Exp where
   show (Val n) = show n
   show (Var i j) = "x" ++ show i ++ show j
   show (Plus []) = ""
-  show (Plus (e : es)) = "(+" ++ " " ++ show e ++ " " ++ showEs es ++ ")"
+  show (Plus (e : es)) = "(+ " ++ show e ++ " " ++ showEs es ++ ")"
 
 instance Show Formula where
   show (And []) = ""
