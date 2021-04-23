@@ -65,6 +65,7 @@ row i j
 -- 各列に被りがない
 colFormula :: Formula
 colFormula = And (uniqueCol 1)
+
 uniqueCol :: Int -> [Formula]
 uniqueCol n
   | n == 9 = [Distinct (col 9 1)]
