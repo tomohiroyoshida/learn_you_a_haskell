@@ -77,7 +77,7 @@ revapp (x : xs) ys = revapp xs (x : ys)
 Show rev xs = revapp xs [] for all lists xs.
 ```
 
-We show the claim by structural induction on xs.
+<!-- We show the claim by structural induction on xs. -->
 
 - If xs = [] then
 
@@ -87,25 +87,26 @@ We show the claim by structural induction on xs.
 
 - If xs = (x : xs') then
 
-  rev (x : xs')  
-  = rev xs' ++ [x] &emsp;&emsp;&emsp; by R2  
-  = revapp xs' [] ++ [x]&emsp;by I.H.  
-  = rev xs' ++ [] ++ [x]&emsp;by lemma1  
-  = rev xs' ++ [x] &emsp;&emsp;&emsp; by A1  
-  = rev (x : xs') &emsp;&emsp;&emsp;&emsp; by R2  
+  rev (x : xs')
+  <!-- = rev xs' ++ [x] &emsp;&emsp;&emsp; by R2
+  = revapp xs' [] ++ [x]&emsp;by I.H.
+  = rev xs' ++ [] ++ [x]&emsp;by lemma1
+  = rev xs' ++ [x] &emsp;&emsp;&emsp; by A1
+  = rev (x : xs') &emsp;&emsp;&emsp;&emsp; by R2   -->
+
   = rev (x : xs') ++ [] &emsp;&emsp; by A3  
   = revapp (x : xs') [] &emsp;&emsp; by lemma1  
   = revapp xs []
 
-  <!-- rev (x : xs')  
+  <!-- rev (x : xs')
   = rev xs
 
-  revapp (x : xs') []  
-  = revapp xs' (x : []) &nbsp; by R4  
-  = revapp xs' ([x] ++ []) by lemma2  
-  = revapp xs' [x] &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; by A3  
-  = rev xs' ++ [x] &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; by lemma1  
-  = rev (x : xs') &nbsp;&emsp;&emsp;&nbsp; by R2  
+  revapp (x : xs') []
+  = revapp xs' (x : []) &nbsp; by R4
+  = revapp xs' ([x] ++ []) by lemma2
+  = revapp xs' [x] &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; by A3
+  = rev xs' ++ [x] &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; by lemma1
+  = rev (x : xs') &nbsp;&emsp;&emsp;&nbsp; by R2
   = rev xs -->
 
 ---
@@ -145,7 +146,7 @@ We show the claim by structural induction on xs.
   - If ys = [] then
 
     x : []  
-    = [x] &emsp;&emsp;&emsp;  
+    = [x] &emsp;&emsp;&emsp;
 
     [x] ++ []  
     = [x] &emsp;&emsp;&emsp; by A3
