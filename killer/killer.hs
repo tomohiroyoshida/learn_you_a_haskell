@@ -75,7 +75,7 @@ colFormula :: Formula
 colFormula = And (uniqueCol 1)
 uniqueCol :: Int -> [Formula]
 uniqueCol n
-  | n == 9 = [Distinct (col 9 1)]
+  | n == 9 = [Distinct (col 1 9)]
   | otherwise = [Distinct (col 1 n)] ++ uniqueCol (n+1)
 
 col :: Int -> Int ->  [Exp]

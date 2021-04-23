@@ -35,6 +35,7 @@ instance Show Formula where
   show (Geq e1 e2) = "(>= " ++ show e1 ++ " " ++ show e2 ++ ")"
   show (Eq e1 e2) = "(= " ++ show e1 ++ " " ++ show e2 ++ ")"
 
+
 -- 数独ソルバー
 -- ケージ
 cageFormula :: [[Int]] -> Formula
@@ -70,7 +71,7 @@ colFormula = And (uniqueCol 1)
 
 uniqueCol :: Int -> [Formula]
 uniqueCol n
-  | n == 9 = [Distinct (col 9 1)]
+  | n == 9 = [Distinct (col 1 9)]
   | otherwise = [Distinct (col 1 n)] ++ uniqueCol (n+1)
 
 col :: Int -> Int ->  [Exp]
@@ -115,3 +116,10 @@ showVals :: [Exp] -> String
 showVals [] = ""
 showVals [e] = show e
 showVals (e : es) = show e ++ " " ++ showVals es
+
+
+-- tests
+testForm = assert (cageFormula [[3, 11, 12], [15, 13, 14, 15]])
+testRow = assert rowFormula
+testCol = assert colFormula
+testRange = assert range
