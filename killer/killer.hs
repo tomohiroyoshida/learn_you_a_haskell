@@ -55,37 +55,41 @@ vars :: [Int] -> [Exp]
 vars [] = []
 vars (x : xs) = Var (x `div` 10) (x `mod` 10) : vars xs
 
+-- 行に被りなし
+rowFormula :: Formula
+rowFormula = And (uniqueRow 1)
+
+uniqueRow :: Int -> [Formula]
+uniqueRow n
+  | n == 9 = [Distinct (row 9 1)]
+  | otherwise = [Distinct (row n 1)] ++ uniqueRow (n+1)
+
+row :: Int -> Int -> [Exp]
+row i j
+  | j == 9 = [Var i 9]
+  | otherwise = Var i j : row i (j+1)
+
+
 -- 各列に被りがない
--- colFormula :: Formula
--- colFormula  = And disList
-
--- disList :: [Formula]
--- disList = 
-
-
+colFormula :: Formula
+colFormula = And (uniqueCol 1)
+uniqueCol :: Int -> [Formula]
+uniqueCol n
+  | n == 9 = [Distinct (col 9 1)]
+  | otherwise = [Distinct (col 1 n)] ++ uniqueCol (n+1)
 
 col :: Int -> Int ->  [Exp]
 col i j
-  | j == 9 = [Var 9 i]
-  | otherwise =  [Var j i] ++ col (j + 1) i
-testc = col 1 1
-
--- 各行に被りがない(今回はi=1で正しく作動)
-uniqueRow :: Int -> String
-uniqueRow i
-	| i == 9 = "(distinct " ++  row 1 9 ++ ")"
-  | otherwise = "(distinct " ++ row i 1 ++ ") " ++ uniqueRow (i+1)
-
-row :: Int -> Int ->  String
-row i j
-  | j == 9 = "x" ++ show i ++ "9"
-  | otherwise =  "x" ++ show i ++ show j ++ " "++ row i (j+1)
+  | i == 9 = [Var 9 j]
+  | otherwise =  Var i j : col (i+1) j
 
 -- 3*3に被りがない
 -- unique3 :: String
 -- unique3 = "(distinct " ++
 
 -- 数は1~9(今回はx=11代入で正しく作動)
+oneToNine :: String
+oneToNine = range 11
 range :: Int -> String
 range x
   | x == 99 = one x ++ nine x
@@ -109,11 +113,11 @@ check = "(check-sat)"
 -- assert
 assert :: Formula -> String
 assert f = "(assert " ++ show f ++ ")"
+
 -- get-value
 getVal :: [Exp] -> String
 getVal [] = ""
 getVal es = "(get-value (" ++ showVals es ++ ")"
-
 showVals :: [Exp] -> String
 showVals [] = ""
 showVals [e] = show e
@@ -124,21 +128,20 @@ showVals (e : es) = show e ++ " " ++ showVals es
 --   ss <- (map read . words) <$> getLine
 -- 	print ss
 
-printList :: Handle -> IO ()
-printList fp = do
-    eof <- hIsEOF fp
-    if eof then return ()
-    else do
-      str <- DTI.hGetLine fp
-      print str
-      printList fp
-
+-- printList :: Handle -> IO ()
+-- printList fp = do
+--     eof <- hIsEOF fp
+--     if eof then return ()
+--     else do
+--       str <- DTI.hGetLine fp
+--       print str
+--       printList fp
+-- main :: IO ()
+-- main = do
+--     fp <- openFile "input.txt" ReadMode
+--     printList fp
 
 -- [a, b] <- map read . words <$> getLine
-main :: IO ()
-main = do
-    fp <- openFile "input.txt" ReadMode
-    printList fp
 
 -- tests
 test1 = Var 1 2
@@ -159,4 +162,5 @@ nums =  [[3, 11, 12], [15, 13, 14, 15], [22, 16, 25, 26, 35 ]]
 dis = "(distinct x11 x21 x31 x41 x51 x61 x71 x81 x91) (distinct x12 x22 x32 x42 x52 x62 x72 x82 x92) (distinct x13 x23 x33 x43 x53 x63 x73 x83 x93) (distinct x14 x24 x34 x44 x54 x64 x74 x84 x94) (distinct x15 x25 x35 x45 x55 x65 x75 x85 x95) (distinct x16 x26 x36 x46 x56 x66 x76 x86 x96) (distinct x17 x27 x37 x47 x57 x67 x77 x87 x97) (distinct x18 x28 x38 x48 x58 x68 x78 x88 x98) (distinct x19 x29 x39 x49 x59 x69 x79 x89 x99)"
 testa = cageFormula nums
 testb = assert (cageFormula nums)
--- testd = assert (colFormula )
+as1 = assert rowFormula
+as2 = assert rowFormula
