@@ -1,3 +1,5 @@
+import Data.List
+
 -- 論理式の表示
 data Exp = Var Int Int | Val Int | Plus [Exp]
 
