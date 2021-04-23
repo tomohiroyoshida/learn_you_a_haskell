@@ -70,7 +70,7 @@ row i j
   | otherwise = Var i j : row i (j+1)
 
 
--- 各列に被りがない
+-- 各列に被りなし
 colFormula :: Formula
 colFormula = And (uniqueCol 1)
 uniqueCol :: Int -> [Formula]
@@ -83,23 +83,24 @@ col i j
   | i == 9 = [Var 9 j]
   | otherwise =  Var i j : col (i+1) j
 
--- 3*3に被りがない
--- unique3 :: String
--- unique3 = "(distinct " ++
+-- TODO: 3*3に被りがない
+-- unique3 :: Formula
+-- unique3 = And three
 
--- 数は1~9(今回はx=11代入で正しく作動)
-oneToNine :: String
-oneToNine = range 11
-range :: Int -> String
-range x
-  | x == 99 = one x ++ nine x
-  | x `mod` 10 == 0 = range (x+1)
-  | otherwise = one x ++ nine x ++ range (x+1)
+-- 数の値域が1~9
+range :: Formula
+range = And (oneToNine 11)
 
-one :: Int -> String
-one x = show (Geq (Var (x `div` 10) (x `mod` 10)) (Val 1))
-nine :: Int -> String
-nine x = show (Geq (Val 9) (Var (x `div` 10) (x `mod` 10)))
+oneToNine :: Int -> [Formula]
+oneToNine x
+  | x == 99 = [one x] ++ [nine x]
+  | x `mod` 10 == 0 = oneToNine (x+1)
+  | otherwise = [one x] ++ [nine x] ++ oneToNine (x+1)
+
+one :: Int -> Formula
+one x = Geq (Var (x `div` 10) (x `mod` 10)) (Val 1)
+nine :: Int -> Formula
+nine x = Geq (Val 9) (Var (x `div` 10) (x `mod` 10))
 
 -- declare-fun
 declareFun :: [Exp] -> String
@@ -116,36 +117,14 @@ assert f = "(assert " ++ show f ++ ")"
 
 -- get-value
 getVal :: [Exp] -> String
-getVal [] = ""
-getVal es = "(get-value (" ++ showVals es ++ ")"
+getVal [] = []
+getVal es = "(get-value (" ++ showVals es ++ "))"
 showVals :: [Exp] -> String
 showVals [] = ""
 showVals [e] = show e
 showVals (e : es) = show e ++ " " ++ showVals es
 
--- main :: IO ()
--- main = do
---   ss <- (map read . words) <$> getLine
--- 	print ss
-
--- printList :: Handle -> IO ()
--- printList fp = do
---     eof <- hIsEOF fp
---     if eof then return ()
---     else do
---       str <- DTI.hGetLine fp
---       print str
---       printList fp
--- main :: IO ()
--- main = do
---     fp <- openFile "input.txt" ReadMode
---     printList fp
-
--- [a, b] <- map read . words <$> getLine
-
 -- tests
-test1 = Var 1 2
-test2 = Val 1
 test3 = Plus [(Val 1), (Var 2 3), (Var 2 3), Val 1, Val 19]
 test4 = Plus [(Var 1 2), (Var 3 4)]
 test5 = Plus [Plus [(Var 1 2), (Var 3 4)], Plus [(Val 1), (Val 9)]]
@@ -159,8 +138,13 @@ test15 = And []
 test16 = Or []
 
 nums =  [[3, 11, 12], [15, 13, 14, 15], [22, 16, 25, 26, 35 ]]
-dis = "(distinct x11 x21 x31 x41 x51 x61 x71 x81 x91) (distinct x12 x22 x32 x42 x52 x62 x72 x82 x92) (distinct x13 x23 x33 x43 x53 x63 x73 x83 x93) (distinct x14 x24 x34 x44 x54 x64 x74 x84 x94) (distinct x15 x25 x35 x45 x55 x65 x75 x85 x95) (distinct x16 x26 x36 x46 x56 x66 x76 x86 x96) (distinct x17 x27 x37 x47 x57 x67 x77 x87 x97) (distinct x18 x28 x38 x48 x58 x68 x78 x88 x98) (distinct x19 x29 x39 x49 x59 x69 x79 x89 x99)"
-testa = cageFormula nums
-testb = assert (cageFormula nums)
+cage1 = cageFormula nums
+
+as0 = assert (cageFormula nums)
 as1 = assert rowFormula
-as2 = assert rowFormula
+as2 = assert colFormula
+as3 = assert range
+
+declare = declareFun [(Var 1 1), (Var 2 3), (Var 2 3)]
+che = check
+getVals = getVal [(Var 1 1), (Var 2 3), (Var 2 3)]
