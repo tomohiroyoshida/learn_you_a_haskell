@@ -36,6 +36,7 @@ instance Show Formula where
   show (Eq e1 e2) = "(= " ++ show e1 ++ " " ++ show e2 ++ ")"
 
 -- 数独ソルバー
+-- ケージ
 cageFormula :: [[Int]] -> Formula
 cageFormula xs = And (showCFs xs)
 
@@ -63,7 +64,6 @@ row i j
   | j == 9 = [Var i 9]
   | otherwise = Var i j : row i (j+1)
 
-
 -- 各列に被りがない
 colFormula :: Formula
 colFormula = And (uniqueCol 1)
@@ -77,3 +77,41 @@ col :: Int -> Int ->  [Exp]
 col i j
   | i == 9 = [Var 9 j]
   | otherwise =  Var i j : col (i+1) j
+
+-- 数の値域が1~9
+range :: Formula
+range = And (oneToNine 11)
+
+oneToNine :: Int -> [Formula]
+oneToNine x
+  | x == 99 = [one x] ++ [nine x]
+  | x `mod` 10 == 0 = oneToNine (x+1)
+  | otherwise = [one x] ++ [nine x] ++ oneToNine (x+1)
+
+one :: Int -> Formula
+one x = Geq (Var (x `div` 10) (x `mod` 10)) (Val 1)
+nine :: Int -> Formula
+nine x = Geq (Val 9) (Var (x `div` 10) (x `mod` 10))
+
+-- declare-fun
+declareFun :: [Exp] -> String
+declareFun [] = ""
+declareFun (x : xs) = "(declare-fun " ++ show x ++ " Int)" ++ declareFun xs
+
+-- check-sat
+check :: String
+check = "(check-sat)"
+
+-- assert
+assert :: Formula -> String
+assert f = "(assert " ++ show f ++ ")"
+
+-- get-value
+getVal :: [Exp] -> String
+getVal [] = ""
+getVal es = "(get-value (" ++ showVals es ++ ")"
+
+showVals :: [Exp] -> String
+showVals [] = ""
+showVals [e] = show e
+showVals (e : es) = show e ++ " " ++ showVals es
