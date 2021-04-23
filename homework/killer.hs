@@ -24,9 +24,9 @@ instance Show Exp where
   show (Plus (e : es)) = "(+ " ++ show e ++ " " ++ showEs es ++ ")"
 
 instance Show Formula where
-  show (And []) = ""
+  show (And []) = []
   show (And (f : fs)) = "(and " ++ show f ++ " " ++ showFs fs ++ ")"
-  show (Or []) = ""
+  show (Or []) = []
   show (Or (f : fs)) = "(or " ++ show f ++ " " ++ showFs fs ++ ")"
   show (Distinct []) = ""
   show (Distinct (e : es)) = "(distinct " ++ show e ++ " " ++ showEs es ++ ")"
