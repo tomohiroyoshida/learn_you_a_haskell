@@ -9,10 +9,10 @@ import Control.Monad
 data Exp = Var Int Int | Val Int | Plus [Exp]
 
 data Formula = And [Formula]
-　　　　　　　　| Or [Formula]
-　　　　　　　　| Distinct [Exp]
-　　　　　　　　| Geq Exp Exp
-　　　　　　　　| Eq Exp Exp
+              | Or [Formula]
+              | Distinct [Exp]
+              | Geq Exp Exp
+              | Eq Exp Exp
 
 instance Show Exp where
   show (Val n) = show n
@@ -32,8 +32,8 @@ instance Show Formula where
 
 showEs :: [Exp] -> String
 showEs [] = []
-showEs [x] = show x
-showEs (x : xs) = show x ++ " " ++ showEs xs
+showEs [e] = show e
+showEs (e : es) = show e ++ " " ++ showEs es
 
 showFs :: [Formula] -> String
 showFs [] = []
@@ -86,6 +86,29 @@ col i j
 -- TODO: 3*3に被りがない
 -- unique3 :: Formula
 -- unique3 = And three
+
+readVar :: String -> Exp
+readVar s = Var (toInt s `div` 10) (toInt s `mod` 10)
+
+readCage :: String -> Formula
+readCage s = Eq (Val (intHead s)) (Plus (toVars (tail (words s))))
+
+-- readCages :: String -> Formula
+-- readCages s = And 
+
+toVars :: [String] -> [Exp]
+toVars [] = []
+toVars (s : ss) = readVar s : toVars ss
+
+intHead :: String -> Int
+intHead s = toInt (head (words s))
+
+toInt :: String -> Int
+toInt s = (read s :: Int)
+toInts :: [String] -> [Int]
+toInts [] = []
+toInts (s : ss) = toInt s : toInts ss
+
 
 -- 数の値域が1~9
 range :: Formula
@@ -148,3 +171,12 @@ as3 = assert range
 declare = declareFun [(Var 1 1), (Var 2 3), (Var 2 3)]
 che = check
 getVals = getVal [(Var 1 1), (Var 2 3), (Var 2 3)]
+
+
+ns = [[1,2], [3,4]]
+nns = [[1,2,3], [4,5,6], [7,8,9]]
+vas = [["x11", "x12"], ["x11", "x12"]]
+
+bar = [(a,b) | a <- nns, b <- nns]
+
+-- foo = [ (a,b) | as <- ns, a <- as, bs <- ns, b <- bs]
