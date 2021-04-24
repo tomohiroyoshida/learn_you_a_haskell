@@ -1,9 +1,4 @@
-import System.Environment
 import Data.List
-import System.IO 
-import Data.Text.IO as DTI 
-import Control.Applicative
-import Control.Monad
 
 -- 論理式の実装
 data Exp = Var Int Int | Val Int | Plus [Exp]
@@ -21,11 +16,11 @@ instance Show Exp where
   show (Plus (e : es)) = "(+ " ++ show e ++ " " ++ showEs es ++ ")"
 
 instance Show Formula where
-  show (And []) = []
+  show (And []) = "true"
   show (And (f : fs)) = "(and " ++ show f ++ " " ++ showFs fs ++ ")"
-  show (Or []) = []
+  show (Or []) = "false"
   show (Or (f : fs)) = "(or " ++ show f ++ " " ++ showFs fs ++ ")"
-  show (Distinct []) = []
+  show (Distinct []) = ""
   show (Distinct (e : es)) = "(distinct " ++ show e ++ " " ++ showEs es ++ ")"
   show (Geq e1 e2) = "(>= " ++ show e1 ++ " " ++ show e2 ++ ")"
   show (Eq e1 e2) = "(= " ++ show e1 ++ " " ++ show e2 ++ ")"
@@ -84,8 +79,6 @@ col i j
   | otherwise =  Var i j : col (i+1) j
 
 -- TODO: 3*3に被りがない
--- unique3 :: Formula
--- unique3 = And three
 
 readVar :: String -> Exp
 readVar s = Var (toInt s `div` 10) (toInt s `mod` 10)
@@ -109,9 +102,6 @@ intHead s = toInt (head (words s))
 
 toInt :: String -> Int
 toInt s = (read s :: Int)
-toInts :: [String] -> [Int]
-toInts [] = []
-toInts (s : ss) = toInt s : toInts ss
 
 
 -- 数の値域が1~9
@@ -179,8 +169,8 @@ getVals = getVal [(Var 1 1), (Var 2 3), (Var 2 3)]
 
 ns = [[1,2], [3,4]]
 nns = [[1,2,3], [4,5,6], [7,8,9]]
-vas = [["x11", "x12"], ["x11", "x12"]]
+-- vas = [["x11", "x12"], ["x11", "x12"]]
 
 bar = [(a,b) | a <- nns, b <- nns]
 
--- foo = [ (a,b) | as <- ns, a <- as, bs <- ns, b <- bs]
+hoge = [ (a,b) | as <- ns, a <- as, bs <- ns, b <- bs]
