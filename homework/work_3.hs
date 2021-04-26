@@ -7,7 +7,7 @@ preorder (Node l x r) =
   [x] ++ preorder l ++ preorder r
 
 -- Exercise 2-1
-myLookUp :: (Eq a) => a -> [(a, b)] -> Maybe b
+myLookUp :: Eq a => a -> [(a, b)] -> Maybe b
 -- Exercise 2-2
 myLookUp _ [] = Nothing
 myLookUp x ((y, z) : yzs)
