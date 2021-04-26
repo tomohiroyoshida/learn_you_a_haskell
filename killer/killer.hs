@@ -13,27 +13,30 @@ instance Show Exp where
   show (Val n) = show n
   show (Var i j) = "x" ++ show i ++ show j
   show (Plus []) = []
-  show (Plus (e : es)) = "(+ " ++ show e ++ " " ++ showEs es ++ ")"
+  show (Plus (e : es)) = "(+ " ++ show e ++ " " ++showEFs es ++ ")"
 
 instance Show Formula where
   show (And []) = "true"
-  show (And (f : fs)) = "(and " ++ show f ++ " " ++ showFs fs ++ ")"
+  show (And (f : fs)) = "(and " ++ show f ++ " " ++ showEFs fs ++ ")"
   show (Or []) = "false"
-  show (Or (f : fs)) = "(or " ++ show f ++ " " ++ showFs fs ++ ")"
+  show (Or (f : fs)) = "(or " ++ show f ++ " " ++ showEFs fs ++ ")"
   show (Distinct []) = ""
-  show (Distinct (e : es)) = "(distinct " ++ show e ++ " " ++ showEs es ++ ")"
+  show (Distinct (e : es)) = "(distinct " ++ show e ++ " " ++ showEFs es ++ ")"
   show (Geq e1 e2) = "(>= " ++ show e1 ++ " " ++ show e2 ++ ")"
   show (Eq e1 e2) = "(= " ++ show e1 ++ " " ++ show e2 ++ ")"
 
-showEs :: [Exp] -> String
-showEs [] = []
-showEs [e] = show e
-showEs (e : es) = show e ++ " " ++ showEs es
+showEFs :: Show a => [a] -> String
+showEFs [] = []
+showEFs es = unwords [ show e | e <- es]
+-- showEs :: [Exp] -> String
+-- showEs [] = []
+-- showEs [e] = show e
+-- showEs (e : es) = show e ++ " " ++ showEs es
 
-showFs :: [Formula] -> String
-showFs [] = []
-showFs [f] = show f
-showFs (f : fs) = show f ++ " " ++ showFs fs
+-- showFs :: [Formula] -> String
+-- showFs [] = []
+-- showFs [f] = show f
+-- showFs (f : fs) = show f ++ " " ++ showFs fs
 
 
 -- 数独ソルバー
@@ -84,7 +87,7 @@ readVar :: String -> Exp
 readVar s = Var (toInt s `div` 10) (toInt s `mod` 10)
 
 readCage :: String -> Formula
-readCage s = Eq (Val (intHead s)) (Plus (toVars (tail (words s))))
+readCage s = Eq (Val (toInt (head (words s)))) (Plus (toVars (tail (words s))))
 
 readCages :: String -> Formula
 readCages s = And (toCages (lines s))
@@ -96,9 +99,6 @@ toCages (s : ss) = readCage s : toCages ss
 toVars :: [String] -> [Exp]
 toVars [] = []
 toVars (s : ss) = readVar s : toVars ss
-
-intHead :: String -> Int
-intHead s = toInt (head (words s))
 
 toInt :: String -> Int
 toInt s = (read s :: Int)
