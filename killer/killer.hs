@@ -28,15 +28,15 @@ instance Show Formula where
 showEFs :: Show a => [a] -> String
 showEFs [] = []
 showEFs es = unwords [ show e | e <- es]
--- showEs :: [Exp] -> String
--- showEs [] = []
--- showEs [e] = show e
--- showEs (e : es) = show e ++ " " ++ showEs es
+showEs :: [Exp] -> String
+showEs [] = []
+showEs [e] = show e
+showEs (e : es) = show e ++ " " ++ showEs es
 
--- showFs :: [Formula] -> String
--- showFs [] = []
--- showFs [f] = show f
--- showFs (f : fs) = show f ++ " " ++ showFs fs
+showFs :: [Formula] -> String
+showFs [] = []
+showFs [f] = show f
+showFs (f : fs) = show f ++ " " ++ showFs fs
 
 
 -- 数独ソルバー
@@ -154,10 +154,10 @@ test14 = Distinct [Val 1,Val 2,Val 3,Val 4,Val 5]
 test15 = And []
 test16 = Or []
 
-nums =  [[3, 11, 12], [15, 13, 14, 15], [22, 16, 25, 26, 35 ]]
-cage1 = cageFormula nums
+numlist =  [[3, 11, 12], [15, 13, 14, 15], [22, 16, 25, 26, 35 ]]
+cage1 = cageFormula numlist
 
-as0 = assert (cageFormula nums)
+as0 = assert (cageFormula numlist)
 as1 = assert rowFormula
 as2 = assert colFormula
 as3 = assert range
@@ -167,10 +167,10 @@ che = check
 getVals = getVal [(Var 1 1), (Var 2 3), (Var 2 3)]
 
 
-ns = [[1,2], [3,4]]
+aa =[1,2]
+bb  = [10,11,12]
+bar = [(a,b) | a <- aa, b <- bb]
+
+nums = [[1,2], [10,11]]
 nns = [[1,2,3], [4,5,6], [7,8,9]]
--- vas = [["x11", "x12"], ["x11", "x12"]]
-
-bar = [(a,b) | a <- nns, b <- nns]
-
-hoge = [ (a,b) | as <- ns, a <- as, bs <- ns, b <- bs]
+hoge = [ (a,b) | as <- nums, a <- as, bs <- nums, b <- bs]

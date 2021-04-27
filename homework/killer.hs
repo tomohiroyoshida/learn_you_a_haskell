@@ -1,4 +1,29 @@
-import Data.List
+-- 1. 内包表記を用いた書き方
+nums = [[1,2,3], [4,5,6], [7,8,9]]
+a = [ (a,b) | as <- nums, a <- as, bs <- nums, b <- bs]
+
+-- 2. 次の関数を各々型を書き実装してください
+readVar :: String -> Exp
+readVar s = Var (toInt s `div` 10) (toInt s `mod` 10)
+
+readCage :: String -> Formula
+readCage s = Eq (Val (toInt (head (words s)))) (Plus (toVars (tail (words s))))
+
+readCages :: String -> Formula
+readCages s = And (toCages (lines s))
+
+-- 補助関数
+toCages :: [String] -> [Formula]
+toCages [] = []
+toCages (s : ss) = readCage s : toCages ss
+
+toVars :: [String] -> [Exp]
+toVars [] = []
+toVars (s : ss) = readVar s : toVars ss
+
+toInt :: String -> Int
+toInt s = (read s :: Int)
+
 
 -- 論理式の表示
 data Exp = Var Int Int | Val Int | Plus [Exp]
@@ -79,7 +104,7 @@ col i j
   | i == 9 = [Var 9 j]
   | otherwise =  Var i j : col (i+1) j
 
--- 数の値域が1~9
+-- 数の範囲が1~9
 range :: Formula
 range = And (oneToNine 11)
 
