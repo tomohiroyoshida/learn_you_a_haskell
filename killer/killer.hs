@@ -1,3 +1,4 @@
+import Data.Char
 import Data.List
 
 -- 論理式の実装
@@ -28,16 +29,6 @@ instance Show Formula where
 showEFs :: Show a => [a] -> String
 showEFs [] = []
 showEFs es = unwords [ show e | e <- es]
-showEs :: [Exp] -> String
-showEs [] = []
-showEs [e] = show e
-showEs (e : es) = show e ++ " " ++ showEs es
-
-showFs :: [Formula] -> String
-showFs [] = []
-showFs [f] = show f
-showFs (f : fs) = show f ++ " " ++ showFs fs
-
 
 -- 数独ソルバー
 cageFormula :: [[Int]] -> Formula
@@ -122,24 +113,57 @@ nine x = Geq (Val 9) (Var (x `div` 10) (x `mod` 10))
 -- declare-fun
 declareFun :: [Exp] -> String
 declareFun [] = ""
-declareFun (x : xs) = "(declare-fun " ++ show x ++ " Int)" ++ declareFun xs
+declareFun (x : xs) = "(declare-fun " ++ show x ++ " () Int) " ++ declareFun xs
 
 -- check-sat
-check :: String
-check = "(check-sat)"
+checkSat :: String
+checkSat = "(check-sat)"
 
 -- assert
 assert :: Formula -> String
 assert f = "(assert " ++ show f ++ ")"
 
 -- get-value
-getVal :: [Exp] -> String
-getVal [] = []
-getVal es = "(get-value (" ++ showVals es ++ "))"
+getVals :: [Exp] -> String
+getVals [] = []
+getVals es = "(get-value (" ++ showVals es ++ "))"
 showVals :: [Exp] -> String
 showVals [] = ""
 showVals [e] = show e
 showVals (e : es) = show e ++ " " ++ showVals es
+
+-- 全ての変数(x11~x99)
+allVars :: Int -> [Exp]
+allVars n
+  | n == 99 = [Var 9 9]
+  | n `mod` 10 == 0 = allVars (n+1)
+  | otherwise = Var (n `div` 10) (n `mod` 10) : allVars (n+1)
+
+main :: IO ()
+main = do
+  str <- readFile "a.txt"
+  writeFile "result.txt" (
+        declareFun (allVars 11)
+        ++ "\n"
+        ++ (assert colFormula)
+        ++ "\n"
+        ++ (assert rowFormula)
+        ++ "\n"
+        ++ (assert (readCages(str)))
+        ++ "\n"
+        ++ (assert range)
+        ++ "\n"
+        ++ checkSat
+        ++ "\n"
+        ++ (getVals (allVars 11))
+        )
+  print (
+        declareFun (allVars 11)
+        ++ (assert (readCages(str)))
+        ++ (assert range)
+        ++ checkSat
+        ++ (getVals (allVars 11))
+        )
 
 -- tests
 test3 = Plus [(Val 1), (Var 2 3), (Var 2 3), Val 1, Val 19]
@@ -163,8 +187,8 @@ as2 = assert colFormula
 as3 = assert range
 
 declare = declareFun [(Var 1 1), (Var 2 3), (Var 2 3)]
-che = check
-getVals = getVal [(Var 1 1), (Var 2 3), (Var 2 3)]
+che = checkSat
+-- getVals = getVal [(Var 1 1), (Var 2 3), (Var 2 3)]
 
 
 aa =[1,2]
