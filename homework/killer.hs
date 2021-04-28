@@ -112,31 +112,28 @@ getAllVars n
 
 -- 3*3
 square :: Formula
-square = And (toFs (splitToCage vars))
+square = And (toFs (splitToSquare [Var x y | xys <- prod, x <- left xys, y <- right xys]))
 
 toFs :: [[Exp]] -> [Formula]
 toFs [] = []
 toFs (xs: xxs) = Distinct xs : toFs xxs
 
-splitToCage :: [Exp] -> [[Exp]]
-splitToCage [] = []
-splitToCage es = splitEvery 9 es
+splitToSquare :: [Exp] -> [[Exp]]
+splitToSquare [] = []
+splitToSquare es = splitEvery 9 es
 
 splitEvery :: Int -> [Exp] -> [[Exp]]
 splitEvery _ [] = []
 splitEvery n es = first : (splitEvery n rest)
   where (first,rest) = splitAt n es
 
-vars :: [Exp]
-vars = [Var a b | as <- prod, a <- left as, b <- right as]
+prod :: [([Int], [Int])]
+prod = [ (a, b) | a <- nums, b <- nums]
 
 left :: ([Int], [Int]) -> [Int]
 left (l,_)= l
 right :: ([Int], [Int]) -> [Int]
 right (_, r) = r
-
-prod :: [([Int], [Int])]
-prod = [ (a, b) | a <- nums, b <- nums]
 
 nums :: [[Int]]
 nums = [[1,2,3], [4,5,6], [7,8,9]]
