@@ -6,19 +6,12 @@ main = do
   str <- readFile file
   writeFile "result.smt2"
     ((declareFuns allVars)
-    ++ "\n"
     ++ (assert unique)
-    ++ "\n"
     ++ (assert colFormula)
-    ++ "\n"
     ++ (assert rowFormula)
-    ++ "\n"
     ++ (assert range)
-    ++ "\n"
     ++ (assert (readCages str))
-    ++ "\n"
     ++ checkSat
-    ++ "\n"
     ++ (getVals allVars))
 
 -- 論理式の実装
