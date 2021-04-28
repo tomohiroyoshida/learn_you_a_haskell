@@ -1,5 +1,4 @@
-import Data.Char
-import Data.List
+import System.Environment
 
 -- 論理式の実装
 data Exp = Var Int Int | Val Int | Plus [Exp]
@@ -14,7 +13,7 @@ instance Show Exp where
   show (Val n) = show n
   show (Var i j) = "x" ++ show i ++ show j
   show (Plus []) = []
-  show (Plus (e : es)) = "(+ " ++ show e ++ " " ++showEFs es ++ ")"
+  show (Plus (e : es)) = "(+ " ++ show e ++ " " ++ showEFs es ++ ")"
 
 instance Show Formula where
   show (And []) = "true"
@@ -31,18 +30,6 @@ showEFs [] = []
 showEFs es = unwords [ show e | e <- es]
 
 -- 数独ソルバー
-cageFormula :: [[Int]] -> Formula
-cageFormula xs = And (showCFs xs)
-
-showCFs :: [[Int]] -> [Formula]
-showCFs [] = []
-showCFs ([] : _) = []
-showCFs ((x : xs) : []) = [Eq (Val x) (Plus (vars xs))]
-showCFs ((x : xs) : xss) = [Eq (Val x) (Plus (vars xs))]  ++ showCFs xss
-
-vars :: [Int] -> [Exp]
-vars [] = []
-vars (x : xs) = Var (x `div` 10) (x `mod` 10) : vars xs
 
 -- 行に被りなし
 rowFormula :: Formula
@@ -94,26 +81,28 @@ toVars (s : ss) = readVar s : toVars ss
 toInt :: String -> Int
 toInt s = (read s :: Int)
 
-
 -- 数の値域が1~9
 range :: Formula
-range = And (oneToNine 11)
+range = And (oneToNine allVars)
 
-oneToNine :: Int -> [Formula]
-oneToNine x
-  | x == 99 = [one x] ++ [nine x]
-  | x `mod` 10 == 0 = oneToNine (x+1)
-  | otherwise = [one x] ++ [nine x] ++ oneToNine (x+1)
+oneToNine :: [Exp] -> [Formula]
+oneToNine [] = []
+oneToNine (e : es) = Geq e (Val 1) : Geq (Val 9) e : oneToNine es
 
-one :: Int -> Formula
-one x = Geq (Var (x `div` 10) (x `mod` 10)) (Val 1)
-nine :: Int -> Formula
-nine x = Geq (Val 9) (Var (x `div` 10) (x `mod` 10))
+-- 全ての変数(x11~x99)
+allVars :: [Exp]
+allVars = getAllVars 11
+
+getAllVars :: Int -> [Exp]
+getAllVars n
+  | n == 99 = [Var 9 9]
+  | n `mod` 10 == 0 = getAllVars (n+1)
+  | otherwise = Var (n `div` 10) (n `mod` 10) : getAllVars (n+1)
 
 -- declare-fun
-declareFun :: [Exp] -> String
-declareFun [] = ""
-declareFun (x : xs) = "(declare-fun " ++ show x ++ " () Int) " ++ declareFun xs
+declareFuns :: [Exp] -> String
+declareFuns [] = ""
+declareFuns (x : xs) = "(declare-fun " ++ show x ++ " () Int) " ++ declareFuns xs
 
 -- check-sat
 checkSat :: String
@@ -129,40 +118,35 @@ getVals [] = []
 getVals es = "(get-value (" ++ showVals es ++ "))"
 showVals :: [Exp] -> String
 showVals [] = ""
-showVals [e] = show e
 showVals (e : es) = show e ++ " " ++ showVals es
-
--- 全ての変数(x11~x99)
-allVars :: Int -> [Exp]
-allVars n
-  | n == 99 = [Var 9 9]
-  | n `mod` 10 == 0 = allVars (n+1)
-  | otherwise = Var (n `div` 10) (n `mod` 10) : allVars (n+1)
 
 main :: IO ()
 main = do
-  str <- readFile "a.txt"
-  writeFile "result.txt" (
-        declareFun (allVars 11)
-        ++ "\n"
-        ++ (assert colFormula)
-        ++ "\n"
-        ++ (assert rowFormula)
-        ++ "\n"
-        ++ (assert (readCages(str)))
-        ++ "\n"
-        ++ (assert range)
-        ++ "\n"
-        ++ checkSat
-        ++ "\n"
-        ++ (getVals (allVars 11))
-        )
+  (file : _) <- getArgs
+  str <- readFile file
+  writeFile "result.smt2"
+    ((declareFuns allVars)
+    ++ "\n"
+    ++ (assert unique)
+    ++ "\n"
+    ++ (assert colFormula)
+    ++ "\n"
+    ++ (assert rowFormula)
+    ++ "\n"
+    ++ (assert range)
+    ++ "\n"
+    ++ (assert (readCages str))
+    ++ "\n"
+    ++ checkSat
+    ++ "\n"
+    ++ (getVals allVars))
+
   print (
-        declareFun (allVars 11)
-        ++ (assert (readCages(str)))
+        declareFuns (getAllVars 11)
+        ++ (assert (readCages str))
         ++ (assert range)
         ++ checkSat
-        ++ (getVals (allVars 11))
+        ++ (getVals (getAllVars 11))
         )
 
 -- tests
@@ -179,22 +163,43 @@ test15 = And []
 test16 = Or []
 
 numlist =  [[3, 11, 12], [15, 13, 14, 15], [22, 16, 25, 26, 35 ]]
-cage1 = cageFormula numlist
 
-as0 = assert (cageFormula numlist)
 as1 = assert rowFormula
 as2 = assert colFormula
 as3 = assert range
 
-declare = declareFun [(Var 1 1), (Var 2 3), (Var 2 3)]
+declare = declareFuns [(Var 1 1), (Var 2 3), (Var 2 3)]
 che = checkSat
 -- getVals = getVal [(Var 1 1), (Var 2 3), (Var 2 3)]
 
 
-aa =[1,2]
-bb  = [10,11,12]
-bar = [(a,b) | a <- aa, b <- bb]
+aa = [1,2,3]
+bb  = [1,2,3]
+bar = [Var a b | a <- aa, b <- bb]
 
-nums = [[1,2], [10,11]]
-nns = [[1,2,3], [4,5,6], [7,8,9]]
-hoge = [ (a,b) | as <- nums, a <- as, bs <- nums, b <- bs]
+-- nums = [[1,2], [10,11]]
+nums :: [[Int]]
+nums = [[1,2,3], [4,5,6], [7,8,9]]
+
+prd :: [([Int], [Int])]
+prd = [ (as, bs) | as <- nums, bs <- nums]
+
+vars :: [Exp]
+vars = [Var a b | as <- prd, a <- fst as, b <- snd as]
+
+splitEvery :: Int -> [Exp] -> [[Exp]]
+splitEvery _ [] = []
+splitEvery n es = first : (splitEvery n rest)
+  where (first,rest) = splitAt n es
+
+splitToCage :: [Exp] -> [[Exp]]
+splitToCage [] = []
+splitToCage es = splitEvery 9 es
+
+toFs :: [[Exp]] -> [Formula]
+toFs [] = []
+toFs (xs: xxs) = Distinct xs : toFs xxs
+
+unique :: Formula
+unique = And (toFs (splitToCage vars))
+-- nn = [(1,1),(1,2),(1,3),(2,1),(2,2),(2,3),(3,1),(3,2),(3,3)]

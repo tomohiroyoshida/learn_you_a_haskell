@@ -1,81 +1,56 @@
--- 1. 内包表記を用いた書き方
-nums = [[1,2,3], [4,5,6], [7,8,9]]
-a = [ (a,b) | as <- nums, a <- as, bs <- nums, b <- bs]
+import System.Environment
 
--- 2. 次の関数を各々型を書き実装してください
-readVar :: String -> Exp
-readVar s = Var (toInt s `div` 10) (toInt s `mod` 10)
+main :: IO ()
+main = do
+  (file : _) <- getArgs
+  str <- readFile file
+  writeFile "result.smt2"
+    ((declareFuns allVars)
+    ++ "\n"
+    ++ (assert unique)
+    ++ "\n"
+    ++ (assert colFormula)
+    ++ "\n"
+    ++ (assert rowFormula)
+    ++ "\n"
+    ++ (assert range)
+    ++ "\n"
+    ++ (assert (readCages str))
+    ++ "\n"
+    ++ checkSat
+    ++ "\n"
+    ++ (getVals allVars))
 
-readCage :: String -> Formula
-readCage s = Eq (Val (toInt (head (words s)))) (Plus (toVars (tail (words s))))
-
-readCages :: String -> Formula
-readCages s = And (toCages (lines s))
-
--- 補助関数
-toCages :: [String] -> [Formula]
-toCages [] = []
-toCages (s : ss) = readCage s : toCages ss
-
-toVars :: [String] -> [Exp]
-toVars [] = []
-toVars (s : ss) = readVar s : toVars ss
-
-toInt :: String -> Int
-toInt s = (read s :: Int)
-
-
--- 論理式の表示
+-- 論理式の実装
 data Exp = Var Int Int | Val Int | Plus [Exp]
 
 data Formula = And [Formula]
-　　　　　　　　| Or [Formula]
-　　　　　　　　| Distinct [Exp]
-　　　　　　　　| Geq Exp Exp
-　　　　　　　　| Eq Exp Exp
-
-showEs :: [Exp] -> String
-showEs [] = ""
-showEs [x] = show x
-showEs (x : xs) = show x ++ " " ++ showEs xs
-
-showFs :: [Formula] -> String
-showFs [] = ""
-showFs [f] = show f
-showFs (f : fs) = show f ++ " " ++ showFs fs
+              | Or [Formula]
+              | Distinct [Exp]
+              | Geq Exp Exp
+              | Eq Exp Exp
 
 instance Show Exp where
   show (Val n) = show n
   show (Var i j) = "x" ++ show i ++ show j
-  show (Plus []) = ""
-  show (Plus (e : es)) = "(+ " ++ show e ++ " " ++ showEs es ++ ")"
+  show (Plus []) = []
+  show (Plus (e : es)) = "(+ " ++ show e ++ " " ++ showEFs es ++ ")"
 
 instance Show Formula where
-  show (And []) = []
-  show (And (f : fs)) = "(and " ++ show f ++ " " ++ showFs fs ++ ")"
-  show (Or []) = []
-  show (Or (f : fs)) = "(or " ++ show f ++ " " ++ showFs fs ++ ")"
+  show (And []) = "true"
+  show (And (f : fs)) = "(and " ++ show f ++ " " ++ showEFs fs ++ ")"
+  show (Or []) = "false"
+  show (Or (f : fs)) = "(or " ++ show f ++ " " ++ showEFs fs ++ ")"
   show (Distinct []) = ""
-  show (Distinct (e : es)) = "(distinct " ++ show e ++ " " ++ showEs es ++ ")"
+  show (Distinct (e : es)) = "(distinct " ++ show e ++ " " ++ showEFs es ++ ")"
   show (Geq e1 e2) = "(>= " ++ show e1 ++ " " ++ show e2 ++ ")"
   show (Eq e1 e2) = "(= " ++ show e1 ++ " " ++ show e2 ++ ")"
 
+showEFs :: Show a => [a] -> String
+showEFs [] = []
+showEFs es = unwords [ show e | e <- es]
 
 -- 数独ソルバー
--- ケージ
-cageFormula :: [[Int]] -> Formula
-cageFormula xs = And (showCFs xs)
-
-showCFs :: [[Int]] -> [Formula]
-showCFs [] = []
-showCFs ([] : _) = []
-showCFs ((x : xs) : []) = [Eq (Val x) (Plus (vars xs))]
-showCFs ((x : xs) : xss) = [Eq (Val x) (Plus (vars xs))]  ++ showCFs xss
-
-vars :: [Int] -> [Exp]
-vars [] = []
-vars (x : xs) = Var (x `div` 10) (x `mod` 10) : vars xs
-
 -- 行に被りなし
 rowFormula :: Formula
 rowFormula = And (uniqueRow 1)
@@ -90,10 +65,9 @@ row i j
   | j == 9 = [Var i 9]
   | otherwise = Var i j : row i (j+1)
 
--- 各列に被りがない
+-- 各列に被りなし
 colFormula :: Formula
 colFormula = And (uniqueCol 1)
-
 uniqueCol :: Int -> [Formula]
 uniqueCol n
   | n == 9 = [Distinct (col 1 9)]
@@ -104,47 +78,88 @@ col i j
   | i == 9 = [Var 9 j]
   | otherwise =  Var i j : col (i+1) j
 
--- 数の範囲が1~9
+-- 読み込み
+readVar :: String -> Exp
+readVar s = Var (toInt s `div` 10) (toInt s `mod` 10)
+
+readCage :: String -> Formula
+readCage s = Eq (Val (toInt (head (words s)))) (Plus (toVars (tail (words s))))
+
+readCages :: String -> Formula
+readCages s = And (toCages (lines s))
+
+toCages :: [String] -> [Formula]
+toCages [] = []
+toCages (s : ss) = readCage s : toCages ss
+
+toVars :: [String] -> [Exp]
+toVars [] = []
+toVars (s : ss) = readVar s : toVars ss
+
+toInt :: String -> Int
+toInt s = (read s :: Int)
+
+-- 数の値域が1~9
 range :: Formula
-range = And (oneToNine 11)
+range = And (oneToNine allVars)
 
-oneToNine :: Int -> [Formula]
-oneToNine x
-  | x == 99 = [one x] ++ [nine x]
-  | x `mod` 10 == 0 = oneToNine (x+1)
-  | otherwise = [one x] ++ [nine x] ++ oneToNine (x+1)
+oneToNine :: [Exp] -> [Formula]
+oneToNine [] = []
+oneToNine (e : es) = Geq e (Val 1) : Geq (Val 9) e : oneToNine es
 
-one :: Int -> Formula
-one x = Geq (Var (x `div` 10) (x `mod` 10)) (Val 1)
-nine :: Int -> Formula
-nine x = Geq (Val 9) (Var (x `div` 10) (x `mod` 10))
+-- 全ての変数(x11~x99)
+allVars :: [Exp]
+allVars = getAllVars 11
+
+getAllVars :: Int -> [Exp]
+getAllVars n
+  | n == 99 = [Var 9 9]
+  | n `mod` 10 == 0 = getAllVars (n+1)
+  | otherwise = Var (n `div` 10) (n `mod` 10) : getAllVars (n+1)
+
+-- 3*3
+unique :: Formula
+unique = And (toFs (splitToCage vars))
+
+toFs :: [[Exp]] -> [Formula]
+toFs [] = []
+toFs (xs: xxs) = Distinct xs : toFs xxs
+
+splitToCage :: [Exp] -> [[Exp]]
+splitToCage [] = []
+splitToCage es = splitEvery 9 es
+
+splitEvery :: Int -> [Exp] -> [[Exp]]
+splitEvery _ [] = []
+splitEvery n es = first : (splitEvery n rest)
+  where (first,rest) = splitAt n es
+
+vars :: [Exp]
+vars = [Var a b | as <- prd, a <- fst as, b <- snd as]
+
+prd :: [([Int], [Int])]
+prd = [ (as, bs) | as <- nums, bs <- nums]
+
+nums :: [[Int]]
+nums = [[1,2,3], [4,5,6], [7,8,9]]
 
 -- declare-fun
-declareFun :: [Exp] -> String
-declareFun [] = ""
-declareFun (x : xs) = "(declare-fun " ++ show x ++ " Int)" ++ declareFun xs
+declareFuns :: [Exp] -> String
+declareFuns [] = ""
+declareFuns (x : xs) = "(declare-fun " ++ show x ++ " () Int) " ++ declareFuns xs
 
 -- check-sat
-check :: String
-check = "(check-sat)"
+checkSat :: String
+checkSat = "(check-sat)"
 
 -- assert
 assert :: Formula -> String
 assert f = "(assert " ++ show f ++ ")"
 
 -- get-value
-getVal :: [Exp] -> String
-getVal [] = ""
-getVal es = "(get-value (" ++ showVals es ++ ")"
-
+getVals :: [Exp] -> String
+getVals [] = []
+getVals es = "(get-value (" ++ showVals es ++ "))"
 showVals :: [Exp] -> String
 showVals [] = ""
-showVals [e] = show e
 showVals (e : es) = show e ++ " " ++ showVals es
-
-
--- tests
-testForm = assert (cageFormula [[3, 11, 12], [15, 13, 14, 15]])
-testRow = assert rowFormula
-testCol = assert colFormula
-testRange = assert range
