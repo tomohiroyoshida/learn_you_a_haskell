@@ -128,10 +128,15 @@ splitEvery n es = first : (splitEvery n rest)
   where (first,rest) = splitAt n es
 
 vars :: [Exp]
-vars = [Var a b | as <- prd, a <- fst as, b <- snd as]
+vars = [Var a b | as <- prod, a <- left as, b <- right as]
 
-prd :: [([Int], [Int])]
-prd = [ (a, b) | a <- nums, b <- nums]
+left :: ([Int], [Int]) -> [Int]
+left (l,_)= l
+right :: ([Int], [Int]) -> [Int]
+right (_, r) = r
+
+prod :: [([Int], [Int])]
+prod = [ (a, b) | a <- nums, b <- nums]
 
 nums :: [[Int]]
 nums = [[1,2,3], [4,5,6], [7,8,9]]
