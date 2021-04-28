@@ -6,10 +6,10 @@ main = do
   str <- readFile file
   writeFile "output.smt2"
     ((declareFuns allVars)
+    ++ (assert range)
     ++ (assert square)
     ++ (assert colFormula)
     ++ (assert rowFormula)
-    ++ (assert range)
     ++ (assert (readCages str))
     ++ checkSat
     ++ (getVals allVars))
