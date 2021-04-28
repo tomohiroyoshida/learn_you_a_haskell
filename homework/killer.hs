@@ -6,7 +6,7 @@ main = do
   str <- readFile file
   writeFile "result.smt2"
     ((declareFuns allVars)
-    ++ (assert unique)
+    ++ (assert square)
     ++ (assert colFormula)
     ++ (assert rowFormula)
     ++ (assert range)
@@ -111,8 +111,8 @@ getAllVars n
   | otherwise = Var (n `div` 10) (n `mod` 10) : getAllVars (n+1)
 
 -- 3*3
-unique :: Formula
-unique = And (toFs (splitToCage vars))
+square :: Formula
+square = And (toFs (splitToCage vars))
 
 toFs :: [[Exp]] -> [Formula]
 toFs [] = []
