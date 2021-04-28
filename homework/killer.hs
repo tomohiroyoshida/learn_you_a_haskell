@@ -131,7 +131,7 @@ vars :: [Exp]
 vars = [Var a b | as <- prd, a <- fst as, b <- snd as]
 
 prd :: [([Int], [Int])]
-prd = [ (as, bs) | as <- nums, bs <- nums]
+prd = [ (a, b) | a <- nums, b <- nums]
 
 nums :: [[Int]]
 nums = [[1,2,3], [4,5,6], [7,8,9]]
