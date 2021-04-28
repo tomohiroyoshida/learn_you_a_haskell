@@ -5,14 +5,14 @@ main = do
   (file : _) <- getArgs
   str <- readFile file
   writeFile "output.smt2"
-    ((declareFuns allVars)
-    ++ (assert range)
-    ++ (assert square)
-    ++ (assert colFormula)
-    ++ (assert rowFormula)
-    ++ (assert (readCages str))
+    (declareFuns allVars
+    ++ assert range
+    ++ assert square
+    ++ assert colFormula
+    ++ assert rowFormula
+    ++ assert (readCages str)
     ++ checkSat
-    ++ (getVals allVars))
+    ++ getVals allVars)
 
 -- 論理式の実装
 data Exp = Var Int Int | Val Int | Plus [Exp]
@@ -46,30 +46,17 @@ showEFs es = unwords [ show e | e <- es]
 -- 数独ソルバー
 -- 行に被りなし
 rowFormula :: Formula
-rowFormula = And (uniqueRow 1)
+rowFormula = And [Distinct (row n) | n <- [1..9]]
 
-uniqueRow :: Int -> [Formula]
-uniqueRow n
-  | n == 9 = [Distinct (row 9 1)]
-  | otherwise = [Distinct (row n 1)] ++ uniqueRow (n+1)
-
-row :: Int -> Int -> [Exp]
-row i j
-  | j == 9 = [Var i 9]
-  | otherwise = Var i j : row i (j+1)
+row :: Int -> [Exp]
+row i = [Var i j | j <- [1..9]]
 
 -- 各列に被りなし
 colFormula :: Formula
-colFormula = And (uniqueCol 1)
-uniqueCol :: Int -> [Formula]
-uniqueCol n
-  | n == 9 = [Distinct (col 1 9)]
-  | otherwise = [Distinct (col 1 n)] ++ uniqueCol (n+1)
+colFormula = And [Distinct (col n) | n <- [1..9]]
 
-col :: Int -> Int ->  [Exp]
-col i j
-  | i == 9 = [Var 9 j]
-  | otherwise =  Var i j : col (i+1) j
+col :: Int ->  [Exp]
+col i = [Var j i | j <- [1..9]]
 
 -- 読み込み
 readVar :: String -> Exp
@@ -102,21 +89,14 @@ oneToNine (e : es) = Geq e (Val 1) : Geq (Val 9) e : oneToNine es
 
 -- 全ての変数(x11~x99)
 allVars :: [Exp]
-allVars = getAllVars 11
-
-getAllVars :: Int -> [Exp]
-getAllVars n
-  | n == 99 = [Var 9 9]
-  | n `mod` 10 == 0 = getAllVars (n+1)
-  | otherwise = Var (n `div` 10) (n `mod` 10) : getAllVars (n+1)
+allVars = [Var x y | x <- [1..9], y <- [1..9]]
 
 -- 3*3
 square :: Formula
 square = And (toFs (splitToSquare [Var x y | xys <- prod, x <- left xys, y <- right xys]))
 
 toFs :: [[Exp]] -> [Formula]
-toFs [] = []
-toFs (xs: xxs) = Distinct xs : toFs xxs
+toFs ees = [Distinct es | es <- ees]
 
 splitToSquare :: [Exp] -> [[Exp]]
 splitToSquare [] = []
@@ -127,13 +107,13 @@ splitEvery _ [] = []
 splitEvery n es = first : (splitEvery n rest)
   where (first,rest) = splitAt n es
 
-prod :: [([Int], [Int])]
-prod = [ (a, b) | a <- nums, b <- nums]
-
 left :: ([Int], [Int]) -> [Int]
 left (l,_)= l
 right :: ([Int], [Int]) -> [Int]
 right (_, r) = r
+
+prod :: [([Int], [Int])]
+prod = [ (a, b) | a <- nums, b <- nums]
 
 nums :: [[Int]]
 nums = [[1,2,3], [4,5,6], [7,8,9]]
