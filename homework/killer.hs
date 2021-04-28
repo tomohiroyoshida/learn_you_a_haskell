@@ -4,7 +4,7 @@ main :: IO ()
 main = do
   (file : _) <- getArgs
   str <- readFile file
-  writeFile "result.smt2"
+  writeFile "output.smt2"
     ((declareFuns allVars)
     ++ (assert square)
     ++ (assert colFormula)
