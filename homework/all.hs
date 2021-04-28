@@ -238,3 +238,28 @@ col :: Int -> Int ->  [Exp]
 col i j
   | i == 9 = [Var 9 j]
   | otherwise =  Var i j : col (i+1) j
+
+
+-- 駄作
+toFs :: [Formula]
+toFs = [Distinct es | es <- foo]
+
+splitToSquare :: [Exp] -> [[Exp]]
+splitToSquare [] = []
+splitToSquare es = splitEvery 9 es
+
+splitEvery :: Int -> [Exp] -> [[Exp]]
+splitEvery _ [] = []
+splitEvery n es = first : (splitEvery n rest)
+  where (first,rest) = splitAt n es
+
+left :: ([Int], [Int]) -> [Int]
+left (l,_)= l
+right :: ([Int], [Int]) -> [Int]
+right (_, r) = r
+
+prod :: [([Int], [Int])]
+prod = [ (a, b) | a <- nums, b <- nums]
+
+nums :: [[Int]]
+nums = [[1,2,3], [4,5,6], [7,8,9]]
