@@ -153,6 +153,7 @@ assert f = "(assert " ++ show f ++ ")"
 getVals :: [Exp] -> String
 getVals [] = []
 getVals es = "(get-value (" ++ showVals es ++ "))"
+
 showVals :: [Exp] -> String
 showVals [] = ""
 showVals (e : es) = show e ++ " " ++ showVals es
