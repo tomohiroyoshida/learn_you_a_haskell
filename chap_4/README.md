@@ -108,3 +108,17 @@ describeList xs =
                             [x] -> "a singleton list."
                             xs -> "a longer list."
 ```
+
+### A few more recursion
+
+```
+take' :: (Num i, Ord i) => i -> [a] -> [a]
+take' n _
+    | n <= 0   = []
+take' _ []     = []
+take' n (x:xs) = x : take' (n-1) xs
+```
+
+- The first pattern specifies that if we try to take a 0 or negative number of elements, we get an empty list.
+  Notice that we're using `_` to match the list because we don't really care what it is in this case.
+  Also notice that we use a guard, but without an otherwise part. That means that if n turns out to be more than 0, the matching will fall through to the next pattern. The second pattern indicates that if we try to take anything from an empty list, we get an empty list. The third pattern breaks the list into a head and a tail. And then we state that taking `n` elements from a list equals a list that has `x` as the head and then a list that takes `n-1` elements from the tail as a tail. Try using a piece of paper to write down how the evaluation would look like if we try to take, say, 3 from `[4,3,2,1]`.
