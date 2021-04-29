@@ -62,7 +62,7 @@ readVar :: String -> Exp
 readVar s = Var (toInt s `div` 10) (toInt s `mod` 10)
 
 readCage :: String -> Formula
-readCage s = Eq (Val (toInt (head (words s)))) (Plus [readVar v | v <- tail (words s)])
+readCage s = Eq (Val (toInt (head (words s)))) (Plus [readVar str | str <- tail (words s)])
 
 readCages :: String -> Formula
 readCages s = And [readCage cage | cage <- lines s]
