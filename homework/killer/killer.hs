@@ -4,7 +4,7 @@ main :: IO ()
 main = do
   (file : _) <- getArgs
   str <- readFile file
-  writeFile "output.smt2"
+  writeFile "smt.smt2"
     (declareFuns allVars
     ++ assert range
     ++ assert squareFormula
@@ -40,11 +40,11 @@ instance Show Formula where
   show (Eq e1 e2) = "(= " ++ show e1 ++ " " ++ show e2 ++ ")"
 
 showEFs :: Show a => [a] -> String
-showEFs [] = []
 showEFs es = unwords [ show e | e <- es]
 
+
 -- 数独ソルバー
--- 行に被りなし
+-- 各行に被りなし
 rowFormula :: Formula
 rowFormula = And [Distinct (row n) | n <- [1..9]]
 
@@ -69,12 +69,10 @@ readCages :: String -> Formula
 readCages s = And (toCages (lines s))
 
 toCages :: [String] -> [Formula]
-toCages [] = []
-toCages (s : ss) = readCage s : toCages ss
+toCages ss = [readCage s | s <- ss]
 
 toVars :: [String] -> [Exp]
-toVars [] = []
-toVars (s : ss) = readVar s : toVars ss
+toVars ss = [readVar s | s <- ss]
 
 toInt :: String -> Int
 toInt s = (read s :: Int)
