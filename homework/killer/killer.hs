@@ -42,7 +42,6 @@ instance Show Formula where
 showEFs :: Show a => [a] -> String
 showEFs es = unwords [ show e | e <- es]
 
-
 -- 数独ソルバー
 -- 各行に被りなし
 rowFormula :: Formula
