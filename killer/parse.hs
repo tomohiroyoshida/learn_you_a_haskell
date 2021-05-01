@@ -24,12 +24,12 @@ myParse = do
   keyword ")"
   return (s,(read n :: Int))
 
--- (Maybe [(String, Int)])
--- type (Maybe [(String, Int)]) = (Maybe [(String, Int)])
-parseSMTOutput :: Parser (Maybe [(String, Int)])
+type SMTOutput = Maybe [(String, Int)]
+
+parseSMTOutput :: Parser SMTOutput
 parseSMTOutput = try parseSat <|> parseUnsat
 
-parseSat :: Parser (Maybe [(String, Int)])
+parseSat :: Parser SMTOutput
 parseSat = do
   keyword "sat"
   keyword "("
@@ -37,14 +37,14 @@ parseSat = do
   keyword ")"
   return (Just s)
 
-parseUnsat :: Parser (Maybe [(String, Int)])
+parseUnsat :: Parser SMTOutput
 parseUnsat = do
   keyword  "unsat"
   return Nothing
 
 -- solve
 type SMTInput = FilePath
-solve :: String -> SMTInput -> IO (Maybe [(String, Int)])
+solve :: String -> SMTInput -> IO SMTOutput
 solve toolPath input = do
   result <- readProcess toolPath [input] []
   case parse parseSMTOutput "z3result.txt" result of
