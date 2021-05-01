@@ -1,4 +1,3 @@
-import System.Environment
 import Text.ParserCombinators.Parsec
 import System.Process
 
@@ -25,13 +24,12 @@ myParse = do
   keyword ")"
   return (s,(read n :: Int))
 
--- SMTOutput
-type SMTOutput = Maybe [(String, Int)]
-
-parseSMTOutput :: Parser SMTOutput
+-- (Maybe [(String, Int)])
+-- type (Maybe [(String, Int)]) = (Maybe [(String, Int)])
+parseSMTOutput :: Parser (Maybe [(String, Int)])
 parseSMTOutput = try parseSat <|> parseUnsat
 
-parseSat :: Parser SMTOutput
+parseSat :: Parser (Maybe [(String, Int)])
 parseSat = do
   keyword "sat"
   keyword "("
@@ -39,32 +37,34 @@ parseSat = do
   keyword ")"
   return (Just s)
 
-parseUnsat :: Parser SMTOutput
+parseUnsat :: Parser (Maybe [(String, Int)])
 parseUnsat = do
   keyword  "unsat"
   return Nothing
 
 -- solve
 type SMTInput = FilePath
--- solve :: String -> SMTInput -> SMTOutput
+solve :: String -> SMTInput -> IO (Maybe [(String, Int)])
 solve toolPath input = do
   result <- readProcess toolPath [input] []
-  case (parse parseSMTOutput "z3result.txt" result) of
+  case parse parseSMTOutput "z3result.txt" result of
     Left e -> error (show e)
     Right r -> return r
-  -- return (fromRight Nothing (parse parseSMTOutput "z3result.txt" result))
-
-fromRight :: b -> Either a b -> b
-fromRight _ (Right s) = s
-fromRight s _ = s
 
 -- キラー数独の問題を入力として受け取り、答えを 9x9 の盤上に表示するプログラム
--- foo :: FilePath -> IO String
-foo file = do
+solveSudoku :: FilePath -> IO ()
+solveSudoku file = do
   createSMTFile file
   result <- solve "z3" "smt.smt2"
-  -- f <- Just result
-  return result
+  case result of
+    Just xs -> putStr (showBlock 1 [n | (_,n) <- xs])
+    Nothing -> putStr ""
+
+showBlock ::  Int -> [Int] -> String
+showBlock _ [] = ""
+showBlock n (x : xs)
+  | n `mod` 9 == 0 = show x ++ "\n" ++ showBlock (n+1) xs
+  | otherwise = show x ++ " " ++ showBlock (n+1) xs
 
 createSMTFile :: FilePath -> IO ()
 createSMTFile file = do
