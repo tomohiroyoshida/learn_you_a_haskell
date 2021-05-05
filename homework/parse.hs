@@ -1,6 +1,43 @@
 import Text.ParserCombinators.Parsec
 import System.Process
 
+-- キラー数独の問題を入力として受け取り、答えを 9x9 の盤上に表示するプログラム
+solveSudoku :: FilePath -> IO ()
+solveSudoku file = do
+  createSMTFile file
+  result <- solve "z3" "smt.smt2"
+  case result of
+    Just xs -> putStr (showBlock 1 [n | (_,n) <- xs])
+    Nothing -> putStr ""
+
+createSMTFile :: FilePath -> IO ()
+createSMTFile file = do
+    str <- readFile file
+    writeFile "smt.smt2"
+      (declareFuns allVars
+      ++ assert range
+      ++ assert squareFormula
+      ++ assert colFormula
+      ++ assert rowFormula
+      ++ assert (readCages str)
+      ++ checkSat
+      ++ getVals allVars)
+
+-- solve
+type SMTInput = FilePath
+solve :: String -> SMTInput -> IO SMTOutput
+solve toolPath input = do
+  result <- readProcess toolPath [input] []
+  case parse parseSMTOutput "z3result.txt" result of
+    Left e -> error (show e)
+    Right r -> return r
+
+showBlock ::  Int -> [Int] -> String
+showBlock _ [] = ""
+showBlock n (x : xs)
+  | n `mod` 9 == 0 = show x ++ "\n" ++ showBlock (n+1) xs
+  | otherwise = show x ++ " " ++ showBlock (n+1) xs
+
 -- scanners
 keyword :: String -> Parser ()
 keyword s = do
@@ -41,43 +78,6 @@ parseUnsat :: Parser SMTOutput
 parseUnsat = do
   keyword  "unsat"
   return Nothing
-
--- solve
-type SMTInput = FilePath
-solve :: String -> SMTInput -> IO SMTOutput
-solve toolPath input = do
-  result <- readProcess toolPath [input] []
-  case parse parseSMTOutput "z3result.txt" result of
-    Left e -> error (show e)
-    Right r -> return r
-
--- キラー数独の問題を入力として受け取り、答えを 9x9 の盤上に表示するプログラム
-solveSudoku :: FilePath -> IO ()
-solveSudoku file = do
-  createSMTFile file
-  result <- solve "z3" "smt.smt2"
-  case result of
-    Just xs -> putStr (showBlock 1 [n | (_,n) <- xs])
-    Nothing -> putStr ""
-
-showBlock ::  Int -> [Int] -> String
-showBlock _ [] = ""
-showBlock n (x : xs)
-  | n `mod` 9 == 0 = show x ++ "\n" ++ showBlock (n+1) xs
-  | otherwise = show x ++ " " ++ showBlock (n+1) xs
-
-createSMTFile :: FilePath -> IO ()
-createSMTFile file = do
-    str <- readFile file
-    writeFile "smt.smt2"
-      (declareFuns allVars
-      ++ assert range
-      ++ assert squareFormula
-      ++ assert colFormula
-      ++ assert rowFormula
-      ++ assert (readCages str)
-      ++ checkSat
-      ++ getVals allVars)
 
 -- 論理式の実装
 data Exp = Var Int Int | Val Int | Plus [Exp]
