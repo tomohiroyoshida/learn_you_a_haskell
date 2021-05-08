@@ -23,6 +23,7 @@ createSMTFile file = do
       ++ checkSat
       ++ getVals allVars)
 
+
 -- solve
 type SMTInput = FilePath
 solve :: String -> SMTInput -> IO SMTOutput
