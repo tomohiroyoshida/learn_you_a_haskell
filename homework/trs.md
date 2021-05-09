@@ -27,6 +27,7 @@ R t ∈ NF(R)}
 
 # No.5
 
+？？？？？？？？？？？？
 Without using juxtaposition notation, represent the
 following applicative TRS:
 S x y z → x z (y z)
