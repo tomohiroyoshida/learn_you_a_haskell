@@ -27,9 +27,12 @@ R t ∈ NF(R)}
 
 # No.5
 
-？？？？？？？？？？？？
 Without using juxtaposition notation, represent the
 following applicative TRS:
 S x y z → x z (y z)
 K x y → x
 I x → x
+
+((S ◦ x) ◦ y) ◦ z → (x◦ y)◦ (y◦ z)
+((K ◦ x) ◦ y) → x
+I ◦ x → x
