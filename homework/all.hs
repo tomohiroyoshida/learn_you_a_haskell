@@ -241,9 +241,6 @@ col i j
 
 
 -- 駄作
-toFs :: [Formula]
-toFs = [Distinct es | es <- foo]
-
 splitToSquare :: [Exp] -> [[Exp]]
 splitToSquare [] = []
 splitToSquare es = splitEvery 9 es
