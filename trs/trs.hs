@@ -38,15 +38,15 @@ r1 = replace (F "add" [F "s" [F "add" [V "x", V "y"]], F "s" [V "y"]]) (V "xy") 
 
 type Subst = [(String, Term)]
 -- substitute t σ= tσ
--- substitute :: Term -> Subst -> Term
+substitute :: Term -> Subst -> Term
 substitute (V x) [] = V x
 substitute (V x) ((s, t) : subs)
   | x == s = t
   | otherwise = substitute (V x) subs
 substitute (F f ts) [] = (F f ts)
-substitute (F f (te : tes)) ((s, t) : subs)
+substitute (F _ (te : tes)) ((s, t) : subs) = V "x"
 
-check :: Term -> String -> 
+-- check :: Term -> String -> 
 
 ss = substitute (V "y") [("x", (V "changeX")), ("y", (V "changeY"))]
 ss2 = substitute (F "add" [(V "a"), (V "x")]) [("x", (V "changeX")), ("y", (V "changeY"))]
