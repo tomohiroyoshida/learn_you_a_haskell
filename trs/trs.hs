@@ -1,5 +1,5 @@
 import Data.List
--- import Control.Monad (guard)
+import Control.Monad (guard)
 
 data Term = V String | F String [Term] deriving Eq
 type Position = [Int]
@@ -24,10 +24,12 @@ subtermAt _ _ = V ""
 
 -- replace t u p = t[u]_p
 -- replace :: Term -> Term -> Position -> Term
--- replace (F f ts) u (i : q) = [x | ]
-replace _ _ _ = [V "ERR"]
+-- replace (V x) t [] = t
+-- replace (V x) t (p : ps) = t
+-- replace (F f ts) t [] = t
+-- replace _ _ _ = [V "ERR"]
 
-r1 = replace (F "add" [F "s" [F "add" [V "x", V "y"]], F "s" [V "y"]]) (V "xy") [0]
+-- r1 = replace (F "add" [F "s" [F "add" [V "x", V "y"]], F "s" [V "y"]]) (V "xy") [0]
 -- replace _ u [] = u
 -- replace (F f ts) u (p : ps) = do
 --     guard (p >= 0 && p < length ts)
@@ -39,17 +41,21 @@ r1 = replace (F "add" [F "s" [F "add" [V "x", V "y"]], F "s" [V "y"]]) (V "xy") 
 type Subst = [(String, Term)]
 -- substitute t σ= tσ
 substitute :: Term -> Subst -> Term
-substitute (V x) [] = V x
+substitute x [] = x
 substitute (V x) ((s, t) : subs)
   | x == s = t
   | otherwise = substitute (V x) subs
-substitute (F f ts) [] = (F f ts)
-substitute (F _ (te : tes)) ((s, t) : subs) = V "x"
+substitute (F f (te : tes)) ((s, t) : subs) = V "x"
 
--- check :: Term -> String -> 
+ss1 = substitute (V "x") [("x", (V "changeX"))]
+ss2 = substitute (V "x") [("x", (F "changeX" [])), ("y", (V "changeY"))]
 
-ss = substitute (V "y") [("x", (V "changeX")), ("y", (V "changeY"))]
-ss2 = substitute (F "add" [(V "a"), (V "x")]) [("x", (V "changeX")), ("y", (V "changeY"))]
+ss4 = substitute (F "add" []) []
+ss5 = substitute (F "add" [(V "a"), (V "b")]) [] -- add(a,b)
+ss6 = substitute (F "add" [(V "a"), (V "b")]) [("a", (V "A"))] -- add(A,b)
+ss7 = substitute (F "add" [(V "a"), (V "b")]) [("a", (V "A")), ("b", (V "B"))] -- add(A,B)
+ss8 = substitute (F "add" [(F "add" [(V "a"), (V "b")]), (F "add" [(V "a"), (V "b")])]) [("a", (V "A")), ("b", (V "B"))] 
+-- add(add(A,B),add(A,B))
 
 -- test
 p1 =  positions (V "x")
