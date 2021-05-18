@@ -21,7 +21,10 @@ subtermAt _ _ = _
 
 -- replace t u p = t[u]_p
 replace :: Term -> Term -> Position -> Term
-replace (F f ts) s (i : q) = [ if i == j then .. else .. | (j, tj) <- ... ]
+replace (V x) t [] = t
+replace (V x) t (p : ps) = t
+replace (F f ts) t [] = t
+-- replace (F f ts) s (i : q) = [ if i == j then .. else .. | (j, tj) <- ... ]
 
 type Subst = [(String, Term)]
 -- substitute t σ= tσ
@@ -31,4 +34,4 @@ substitute (V x) ((s, t) : subs)
   | x == s = t
   | otherwise = substitute (V x) subs
 substitute (F f ts) [] = (F f ts)
-substitute (F f ts) ((s, t) : subs) = ??
+-- substitute (F f ts) ((s, t) : subs) = ??
