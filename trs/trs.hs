@@ -7,7 +7,7 @@ instance Show Term where
   show (V x) = x
   show (F f ts) = f ++ "(" ++ intercalate "," [show t | t <- ts] ++ ")"
 -- Var(t)
--- variables :: Term -> [String]
+variables :: Term -> [String]
 
 -- Pos(t)
 positions :: Term -> [Position]
