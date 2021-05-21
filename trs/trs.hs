@@ -7,7 +7,7 @@ instance Show Term where
   show (V x) = x
   show (F f ts) = f ++ "(" ++ intercalate "," [show t | t <- ts] ++ ")"
 -- Var(t)
-variables :: Term -> [String]
+-- variables :: Term -> [String]
 
 -- Pos(t)
 positions :: Term -> [Position]
@@ -23,13 +23,12 @@ subtermAt (F _ ts) (p : ps)
 subtermAt _ _ = V ""
 
 -- replace t u p = t[u]_p
--- replace :: Term -> Term -> Position -> Term
--- replace (V x) t [] = t
--- replace (V x) t (p : ps) = t
--- replace (F f ts) t [] = t
--- replace _ _ _ = [V "ERR"]
+replace :: Term -> Term -> Position -> Term
+replace (V x) t _ = t
+replace (V x) t (p : ps) = t
+replace (F f ts) t [] = t
+-- replace (F f ts) t (i : q) = [ if i == j then  else .. | (j, tj) <- ... ]
 
--- r1 = replace (F "add" [F "s" [F "add" [V "x", V "y"]], F "s" [V "y"]]) (V "xy") [0]
 -- replace _ u [] = u
 -- replace (F f ts) u (p : ps) = do
 --     guard (p >= 0 && p < length ts)
@@ -37,6 +36,14 @@ subtermAt _ _ = V ""
 --     t <- replace t u ps
 --     return (F f (ts1 ++ t : ts2))
 -- replace _ t _ = t
+
+r = replace (V "x") (V "z") [] -- = z
+r2 = replace (F "add" [V "0", V "y"]) (V "z") [0] -- = add(z, y)
+r3 = replace (F "add" [V "0", V "y"]) (V "z") [1] -- = add (0, z)
+r4 = replace (F "add" [V "0", F "s" [F "add" [F "s" [V "0"], F "s" [V "y"]]]]) (V "z") [1] = add (0, z)
+r4 = replace (F "add" [V "0", F "s" [F "add" [F "s" [V "0"], F "s" [V "y"]]]]) (V "z") [1, 0] -- = add (0, s(z))
+r5 = replace (F "add" [V "0", F "s" [F "add" [F "s" [V "0"], F "s" [V "y"]]]]) (V "z") [1, 0, 0] -- = add (0, s(add(z, s(y))))
+r6 = replace (F "add" [V "0", F "s" [F "add" [F "s" [V "0"], F "s" [V "y"]]]]) (V "z") [1, 0, 0, 0] -- = add (0, s(add(s(z), s(y))))
 
 type Subst = [(String, Term)]
 -- substitute t σ= tσ
@@ -47,15 +54,13 @@ substitute (V x) ((s, t) : subs)
   | otherwise = substitute (V x) subs
 substitute (F f (te : tes)) ((s, t) : subs) = V "x"
 
-ss1 = substitute (V "x") [("x", (V "changeX"))]
-ss2 = substitute (V "x") [("x", (F "changeX" [])), ("y", (V "changeY"))]
+-- subs1 = substitute (V "x") []
+subs2 = substitute (V "x") [("x", F "s" [V "y"])] -- = s(y)
+subs3 = substitute (V "y") [("x", F "s" [V "y"]), ("y", F "s" [V "0"])] -- = s(0)
+subs4 = substitute (F "add" [V "x", V "y"]) [] -- = add(x, y)
+subs5 = substitute (F "add" [V "x", V "y"]) [("x", F "s" [V "y"])] -- = add(s(y), y)
+subs6 = substitute (F "add" [V "x", V "y"]) [("x", F "s" [V "y"]), ("y", F "s" [V "0"])] -- = add(s(y), s(0))
 
-ss4 = substitute (F "add" []) []
-ss5 = substitute (F "add" [(V "a"), (V "b")]) [] -- add(a,b)
-ss6 = substitute (F "add" [(V "a"), (V "b")]) [("a", (V "A"))] -- add(A,b)
-ss7 = substitute (F "add" [(V "a"), (V "b")]) [("a", (V "A")), ("b", (V "B"))] -- add(A,B)
-ss8 = substitute (F "add" [(F "add" [(V "a"), (V "b")]), (F "add" [(V "a"), (V "b")])]) [("a", (V "A")), ("b", (V "B"))] 
--- add(add(A,B),add(A,B))
 
 -- test
 p1 =  positions (V "x")
